@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* assets/css/main.css */
+
+/* assets/css/main.css */
+
+@font-face {
+  font-family: 'inteFont';
+  /* استفاده از ~ برای اشاره به ریشه srcDir (یعنی پوشه app) */
+  src: url('~/assets/Inter-Italic-VariableFont_opsz,wght.ttf') format('collection');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* برای تست قوی‌تر، فونت را به کل بدنه تحمیل کن */
+html, body {
+  font-family: 'inteFont', sans-serif !important;
+}
+
+
