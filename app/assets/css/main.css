@@ -1,17 +1,14 @@
+@font-face {
+  font-family: 'InterVariable';
+  src: url('/fonts/Oswald-SemiBold.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-/* assets/css/main.css */
-
-/* assets/css/main.css */
-
-
-
-/* برای تست قوی‌تر، فونت را به کل بدنه تحمیل کن */
 html, body {
-  font-family: 'inteFont', sans-serif !important;
+  font-family: 'InterVariable', sans-serif ;
 }
-
-

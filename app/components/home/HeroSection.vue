@@ -14,7 +14,3 @@
     <div class="absolute bottom-0 left-0 w-full h-2 "></div>
   </section>
 </template>
-
-<script setup>
-// در اینجا می‌توانید متغیرهای مربوط به انیمیشن‌های ورود (مثل GSAP) را تعریف کنید
-</script>
