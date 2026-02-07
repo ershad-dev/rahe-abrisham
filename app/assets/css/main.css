@@ -9,6 +9,16 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+/* assets/css/main.css */
+
+/* assets/css/main.css */
+
+
+
+
+/* برای تست قوی‌تر، فونت را به کل بدنه تحمیل کن */
 html, body {
   font-family: 'InterVariable', sans-serif ;
 }
