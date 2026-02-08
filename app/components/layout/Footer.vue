@@ -10,22 +10,26 @@
     <div class="relative z-10 w-full px-6 md:px-10 py-8 md:py-10 flex flex-col md:flex-row gap-10 md:gap-4 justify-between">
       
       <div class="flex-1">
-        <h3 class="text-[20px] md:text-[22px] font-bold mb-4 md:mb-6 text-white">ارتباط با ما</h3>
-        <div class="space-y-4 text-[15px] md:text-[17px]">
-          <div class="flex items-center gap-3">
-            <span>📞</span>
-            <span class="dir-ltr">09158875649</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span>📧</span>
-            <span>info@solotis.ir</span>
-          </div>
-          <div class="flex items-start gap-3 leading-relaxed">
-            <span>📍</span>
-            <span>تهران - خیابان دهقان - کوچه قائم پلاک 60</span>
-          </div>
-        </div>
-      </div>
+  <h3 class="text-[20px] md:text-[22px] font-bold mb-4 md:mb-6 text-white">ارتباط با ما</h3>
+  <div class="space-y-4 text-[15px] md:text-[17px]">
+    
+    <div class="flex items-center gap-3">
+      <img src="~/assets/images/call-calling.svg" alt="تلفن" class="w-5 h-5 object-contain" />
+      <span class="dir-ltr">09158875649</span>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <img src="~/assets/images/sms-notification.png" alt="ایمیل" class="w-5 h-5 object-contain" />
+      <span>info@solotis.ir</span>
+    </div>
+    
+    <div class="flex items-start gap-3 leading-relaxed">
+      <img src="~/assets/images/location.png" alt="آدرس" class="w-5 h-5 mt-1 object-contain" />
+      <span>تهران - خیابان دهقان - کوچه قائم پلاک 60</span>
+    </div>
+
+  </div>
+</div>
 
       <div class="flex-1 flex flex-col md:items-center">
         <div class="text-right">

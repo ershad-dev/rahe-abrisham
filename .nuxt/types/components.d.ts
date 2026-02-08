@@ -14,10 +14,15 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 interface _GlobalComponents {
+  'CapitalForm': typeof import("../../app/components/capital/CapitalForm.vue").default
+  'CapitalHero': typeof import("../../app/components/capital/CapitalHero.vue").default
+  'CapitalStats': typeof import("../../app/components/capital/CapitalStats.vue").default
+  'CapitalSteps': typeof import("../../app/components/capital/CapitalSteps.vue").default
   'HomeHeroSection': typeof import("../../app/components/home/HeroSection.vue").default
   'HomeInfoBlock': typeof import("../../app/components/home/InfoBlock.vue").default
   'HomeServicesSection': typeof import("../../app/components/home/ServicesSection.vue").default
   'HomeWhyUsBanner': typeof import("../../app/components/home/WhyUsBanner.vue").default
+  'LayoutBottomNav': typeof import("../../app/components/layout/BottomNav.vue").default
   'LayoutFooter': typeof import("../../app/components/layout/Footer.vue").default
   'LayoutNavbar': typeof import("../../app/components/layout/Navbar.vue").default
   'UiSearchInput': typeof import("../../app/components/ui/SearchInput.vue").default
@@ -45,10 +50,15 @@ interface _GlobalComponents {
   'Html': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Html
   'Body': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Body
   'NuxtIsland': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-island").default
+  'LazyCapitalForm': LazyComponent<typeof import("../../app/components/capital/CapitalForm.vue").default>
+  'LazyCapitalHero': LazyComponent<typeof import("../../app/components/capital/CapitalHero.vue").default>
+  'LazyCapitalStats': LazyComponent<typeof import("../../app/components/capital/CapitalStats.vue").default>
+  'LazyCapitalSteps': LazyComponent<typeof import("../../app/components/capital/CapitalSteps.vue").default>
   'LazyHomeHeroSection': LazyComponent<typeof import("../../app/components/home/HeroSection.vue").default>
   'LazyHomeInfoBlock': LazyComponent<typeof import("../../app/components/home/InfoBlock.vue").default>
   'LazyHomeServicesSection': LazyComponent<typeof import("../../app/components/home/ServicesSection.vue").default>
   'LazyHomeWhyUsBanner': LazyComponent<typeof import("../../app/components/home/WhyUsBanner.vue").default>
+  'LazyLayoutBottomNav': LazyComponent<typeof import("../../app/components/layout/BottomNav.vue").default>
   'LazyLayoutFooter': LazyComponent<typeof import("../../app/components/layout/Footer.vue").default>
   'LazyLayoutNavbar': LazyComponent<typeof import("../../app/components/layout/Navbar.vue").default>
   'LazyUiSearchInput': LazyComponent<typeof import("../../app/components/ui/SearchInput.vue").default>

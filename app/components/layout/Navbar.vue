@@ -1,56 +1,69 @@
 <template>
-  <header class="fixed top-0 left-0 w-full z-50 dir-rtl">
-    <div class="w-full flex items-center justify-between bg-white/60 backdrop-blur-md px-4 md:px-8 py-2 shadow-sm border-b border-white/20">
+  <header class="fixed top-0 left-0 w-full z-[100] dir-rtl font-sans">
+    <div class="w-full flex items-center justify-between bg-white/60 backdrop-blur-md px-4 md:px-10 py-1 shadow-sm border-b border-white/20">
       
       <div class="flex items-center">
-        <button @click="isOpen = !isOpen" class="lg:hidden p-2 ml-2 text-slate-800 hover:bg-gray-100 rounded-md transition">
+        <NuxtLink 
+          to="/login" 
+          class="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1 rounded-lg shadow-sm hover:bg-gray-50 transition text-slate-700"
+        >
+          <span class="text-sm font-bold">پنل کاربری</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </NuxtLink>
+      </div>
+
+      <div class="flex items-center gap-3 flex-1 justify-end">
+        <nav class="hidden lg:flex items-center">
+          <ul class="flex flex-row-reverse items-center text-slate-800 font-medium text-[14px]">
+            <li class="px-3 hover:text-teal-600 transition">
+              <NuxtLink to="/">خانه</NuxtLink>
+            </li>
+            <li class="px-3 border-r border-[#ebebeb] hover:text-teal-600 transition">
+              <NuxtLink to="/capital">تامین سرمایه</NuxtLink>
+            </li>
+            <li class="px-3 border-r border-[#ebebeb] hover:text-teal-600 transition">
+              <NuxtLink to="/about">درباره ما</NuxtLink>
+            </li>
+            <li class="px-3 border-r border-[#ebebeb] hover:text-teal-600 transition">
+              <NuxtLink to="/contact">ارتباط با ما</NuxtLink>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="flex items-center mr-2">
+          <img 
+            src="~/assets/images/landing-bg.jpg" 
+            alt="Logo" 
+            class="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover border border-gray-200"
+          >
+        </div>
+
+        <button 
+          @click.stop="isOpen = !isOpen" 
+          type="button"
+          class="lg:hidden p-2 text-slate-800 hover:bg-gray-100 rounded-md transition relative z-[110]"
+          aria-label="Toggle menu"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path v-if="!isOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-
-        <div class="ml-4 flex items-center">
-          <img 
-            src="assets/images/bg.jpg" 
-" 
-            alt="Logo" 
-            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
-          >
-        </div>
-        
-        <ul class="hidden lg:flex items-center text-slate-800 font-medium text-sm">
-          <li class="px-3 border-l border-gray-400/30 hover:text-blue-700 transition"><NuxtLink to="/">خانه</NuxtLink></li>
-          <li class="px-3 border-l border-gray-400/30 hover:text-blue-700 transition"><NuxtLink to="/capital">تامین سرمایه</NuxtLink></li>
-          <li class="px-3 border-l border-gray-400/30 hover:text-blue-700 transition"><NuxtLink to="/about">درباره ما</NuxtLink></li>
-          <li class="px-3 border-l border-gray-400/30 hover:text-blue-700 transition"><NuxtLink to="/contact">ارتباط با ما</NuxtLink></li>
-          <li class="px-3 hover:text-blue-700 transition"><NuxtLink to="/order">ثبت سفارش کالا</NuxtLink></li>
-        </ul>
       </div>
-
-      <div class="flex items-center bg-white rounded-full overflow-hidden shadow-inner w-48 sm:w-64 md:w-80">
-        <input 
-          type="text" 
-          placeholder="جستجو" 
-          class="w-full bg-transparent border-none py-1 px-4 text-right text-sm outline-none placeholder-gray-400"
-        >
-        <button class="bg-gradient-to-r from-[#AAA4A4] to-[#D23729] p-2 px-4 text-white hover:opacity-90 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-      </div>
-      
     </div>
 
     <transition name="fade-slide">
-      <div v-if="isOpen" class="lg:hidden bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xl">
-        <ul class="flex flex-col p-2 text-right text-slate-800 font-medium">
-          <li><NuxtLink to="/" class="block p-4 hover:bg-gray-50 rounded-lg" @click="isOpen = false">خانه</NuxtLink></li>
-          <li><NuxtLink to="/capital" class="block p-4 hover:bg-gray-50 rounded-lg" @click="isOpen = false">تامین سرمایه</NuxtLink></li>
-          <li><NuxtLink to="/about" class="block p-4 hover:bg-gray-50 rounded-lg" @click="isOpen = false">درباره ما</NuxtLink></li>
-          <li><NuxtLink to="/contact" class="block p-4 hover:bg-gray-50 rounded-lg" @click="isOpen = false">ارتباط با ما</NuxtLink></li>
-          <li><NuxtLink to="/order" class="block p-4 hover:bg-gray-50 rounded-lg font-bold text-blue-600" @click="isOpen = false">ثبت سفارش کالا</NuxtLink></li>
+      <div v-if="isOpen" class="lg:hidden fixed inset-x-0 top-[52px] bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xl z-[100]">
+        <ul class="flex flex-col p-4 text-right text-slate-800 font-medium">
+          <li><NuxtLink to="/" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">خانه</NuxtLink></li>
+          <li><NuxtLink to="/capital" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">تامین سرمایه</NuxtLink></li>
+          <li><NuxtLink to="/about" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">درباره ما</NuxtLink></li>
+          <li><NuxtLink to="/contact" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">ارتباط با ما</NuxtLink></li>
+          <li class="border-t border-gray-100 mt-2">
+            <NuxtLink to="/login" class="block p-3 text-blue-600 font-bold" @click="isOpen = false">پنل کاربری</NuxtLink>
+          </li>
         </ul>
       </div>
     </transition>
@@ -63,11 +76,6 @@ const isOpen = ref(false)
 </script>
 
 <style scoped>
-.dir-rtl {
-  direction: rtl;
-}
-
-/* انیمیشن برای منوی همبرگری */
 .fade-slide-enter-active, .fade-slide-leave-active {
   transition: all 0.3s ease;
 }
