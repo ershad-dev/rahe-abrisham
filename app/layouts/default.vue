@@ -1,5 +1,10 @@
 <template>
   <div>
-    <slot />
+        <layoutNavbar /> 
+
+    <slot /> 
+
+    <layoutFooter/>
+
   </div>
 </template>
