@@ -1,12 +1,9 @@
 <template>
   <div>
-        <layoutNavbar /> 
-    <homeHeroSection /> 
-
-
+    <layoutNavbar /> 
+    <layoutHeaderImg /> 
     <slot /> 
     <layoutBottomNav/>
-
     <layoutFooter/>
 
   </div>

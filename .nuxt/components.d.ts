@@ -14,19 +14,21 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 
+export const AuthLoginFields: typeof import("../app/components/auth/LoginFields.vue").default
+export const AuthOtpFields: typeof import("../app/components/auth/OtpFields.vue").default
+export const AuthRegisterFields: typeof import("../app/components/auth/RegisterFields.vue").default
 export const CapitalForm: typeof import("../app/components/capital/CapitalForm.vue").default
 export const CapitalHero: typeof import("../app/components/capital/CapitalHero.vue").default
 export const CapitalStats: typeof import("../app/components/capital/CapitalStats.vue").default
 export const CapitalSteps: typeof import("../app/components/capital/CapitalSteps.vue").default
-export const HomeHeroSection: typeof import("../app/components/home/HeroSection.vue").default
+export const CommonEmptyState: typeof import("../app/components/common/EmptyState.vue").default
 export const HomeInfoBlock: typeof import("../app/components/home/InfoBlock.vue").default
 export const HomeServicesSection: typeof import("../app/components/home/ServicesSection.vue").default
 export const HomeWhyUsBanner: typeof import("../app/components/home/WhyUsBanner.vue").default
 export const LayoutBottomNav: typeof import("../app/components/layout/BottomNav.vue").default
 export const LayoutFooter: typeof import("../app/components/layout/Footer.vue").default
+export const LayoutHeaderImg: typeof import("../app/components/layout/HeaderImg.vue").default
 export const LayoutNavbar: typeof import("../app/components/layout/Navbar.vue").default
-export const UiSearchInput: typeof import("../app/components/ui/SearchInput.vue").default
-export const UiServiceCard: typeof import("../app/components/ui/ServiceCard.vue").default
 export const NuxtWelcome: typeof import("../node_modules/nuxt/dist/app/components/welcome.vue").default
 export const NuxtLayout: typeof import("../node_modules/nuxt/dist/app/components/nuxt-layout").default
 export const NuxtErrorBoundary: typeof import("../node_modules/nuxt/dist/app/components/nuxt-error-boundary.vue").default
@@ -50,19 +52,21 @@ export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components").Html
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components").Body
 export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island").default
+export const LazyAuthLoginFields: LazyComponent<typeof import("../app/components/auth/LoginFields.vue").default>
+export const LazyAuthOtpFields: LazyComponent<typeof import("../app/components/auth/OtpFields.vue").default>
+export const LazyAuthRegisterFields: LazyComponent<typeof import("../app/components/auth/RegisterFields.vue").default>
 export const LazyCapitalForm: LazyComponent<typeof import("../app/components/capital/CapitalForm.vue").default>
 export const LazyCapitalHero: LazyComponent<typeof import("../app/components/capital/CapitalHero.vue").default>
 export const LazyCapitalStats: LazyComponent<typeof import("../app/components/capital/CapitalStats.vue").default>
 export const LazyCapitalSteps: LazyComponent<typeof import("../app/components/capital/CapitalSteps.vue").default>
-export const LazyHomeHeroSection: LazyComponent<typeof import("../app/components/home/HeroSection.vue").default>
+export const LazyCommonEmptyState: LazyComponent<typeof import("../app/components/common/EmptyState.vue").default>
 export const LazyHomeInfoBlock: LazyComponent<typeof import("../app/components/home/InfoBlock.vue").default>
 export const LazyHomeServicesSection: LazyComponent<typeof import("../app/components/home/ServicesSection.vue").default>
 export const LazyHomeWhyUsBanner: LazyComponent<typeof import("../app/components/home/WhyUsBanner.vue").default>
 export const LazyLayoutBottomNav: LazyComponent<typeof import("../app/components/layout/BottomNav.vue").default>
 export const LazyLayoutFooter: LazyComponent<typeof import("../app/components/layout/Footer.vue").default>
+export const LazyLayoutHeaderImg: LazyComponent<typeof import("../app/components/layout/HeaderImg.vue").default>
 export const LazyLayoutNavbar: LazyComponent<typeof import("../app/components/layout/Navbar.vue").default>
-export const LazyUiSearchInput: LazyComponent<typeof import("../app/components/ui/SearchInput.vue").default>
-export const LazyUiServiceCard: LazyComponent<typeof import("../app/components/ui/ServiceCard.vue").default>
 export const LazyNuxtWelcome: LazyComponent<typeof import("../node_modules/nuxt/dist/app/components/welcome.vue").default>
 export const LazyNuxtLayout: LazyComponent<typeof import("../node_modules/nuxt/dist/app/components/nuxt-layout").default>
 export const LazyNuxtErrorBoundary: LazyComponent<typeof import("../node_modules/nuxt/dist/app/components/nuxt-error-boundary.vue").default>

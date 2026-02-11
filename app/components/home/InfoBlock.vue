@@ -1,22 +1,30 @@
 <template>
-  <section class="w-full bg-white py-12 md:py-20 dir-rtl font-custom">
-    <div class="container mx-auto px-6 md:px-4">
+  <section class="w-full py-10 px-4 md:px-10 dir-rtl">
+    
+    <div class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-[30px] md:rounded-[50px] min-h-[300px] flex items-center justify-center py-12 px-6">
       
-      <div class="text-center mb-6 md:mb-8">
-        <h2 class="text-[32px] md:text-[52px] font-black text-black leading-tight font-InterVariable">
-          تامین سرمایه
-        </h2>
+      <div class="absolute inset-0 z-0">
+          <img 
+              src="~/assets/images/blue-bg .png" 
+              alt="background" 
+              class="w-full h-full object-cover"
+          />
       </div>
 
-      <div class="max-w-4xl mx-auto text-center">
-        <p class="text-[16px] md:text-[22px] text-gray-900 leading-[1.8] tracking-tight font-medium font-InterVariable text-center">
+      <div class="relative z-10 text-center text-white max-w-4xl">
+        
+        <h2 class="text-[32px] md:text-[45px] font-black mb-6 leading-tight">
+          تامین سرمایه
+        </h2>
+
+        <p class="text-[16px] md:text-[20px] leading-[1.8] font-medium text-[#ebebeb]">
           شرکت بازرگانی راه ابریشم با بهره‌گیری از خلاقیت و تجربه، امکان فوق‌العاده‌ای 
           برای سرمایه‌ گذاران ایرانی فراهم کرده تا افراد با حداقل سرمایه و بدون وارد شدن در 
           روند پیچیده صادرات و ترخیص کالا، بتوانند در کسب سود دلاری ناشی از صادرات 
           سهیم باشند.
         </p>
-      </div>
 
+      </div>
     </div>
   </section>
 </template>
@@ -25,4 +33,5 @@
 .dir-rtl {
   direction: rtl;
 }
+/* اگر فونت فارسی دارید اینجا ست کنید، در غیر این صورت از فونت تعریف شده در سوالات قبل استفاده می‌شود */
 </style>

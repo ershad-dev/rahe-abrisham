@@ -30,7 +30,7 @@
 </template>
 
 <style scoped>
-.dir-rtl {
-  direction: rtl;
+.dir-ltr {
+  direction: ltr;
 }
 </style>
