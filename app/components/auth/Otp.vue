@@ -92,7 +92,7 @@ const checkCode = async () => {
     isLoading.value = false
     if (code === "123456") {
       openModal("عملیات موفق", "کد تایید شد. در حال انتقال...")
-      setTimeout(() => navigateTo('/dashboard'), 2000)
+      setTimeout(() => navigateTo('/'), 2000)
     } else {
       attempts.value++
       isShaking.value = true
