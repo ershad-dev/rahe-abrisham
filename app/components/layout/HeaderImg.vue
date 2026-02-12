@@ -15,10 +15,9 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-// ۱. وارد کردن تصاویر به صورت ماژول (این روش در ورسل عالی کار می‌کند)
 import bgLanding from '~/assets/images/landing-bg.jpg'
 import bgAbout from '~/assets/images/about-bg.png'
-import bgContact from '~/assets/images/cantact-bg.png' // دقت کن که نام فایل دقیقا همین باشد
+import bgContact from '~/assets/images/cantact-bg.png'
 import bgCapital from '~/assets/images/landing-bg.jpg'
 
 const route = useRoute()
@@ -26,14 +25,14 @@ const route = useRoute()
 const backgroundImage = computed(() => {
   const currentPath = route.path
 
-  // ۲. لیست صفحاتی که هدر نباید در آن‌ها نمایش داده شود
+  // . لیست صفحاتی که هدر نباید در آن‌ها نمایش داده شود
   const authPages = ['/login', '/register', '/otp','/auth']
   if (authPages.includes(currentPath)) {
     return null
   }
   
 
-  // ۳. انتخاب تصویر بر اساس مسیر
+  // . انتخاب تصویر بر اساس مسیر
   switch (currentPath) {
     case '/about': 
       return bgAbout
