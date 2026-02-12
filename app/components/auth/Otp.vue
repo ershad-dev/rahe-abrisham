@@ -1,0 +1,218 @@
+<script setup lang="ts">
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { navigateTo } from 'nuxt/app'
+
+// تعریف تایپ برای مدال
+interface ModalState {
+  show: boolean
+  title: string
+  body: string
+}
+
+const otpValues = reactive(['', '', '', '', '', ''])
+const inputs = ref<HTMLInputElement[]>([])
+const timer = ref(120)
+const attempts = ref(0)
+const isExpired = ref(false)
+const isLoading = ref(false)
+const errorMsg = ref('')
+const showResend = ref(false)
+const isShaking = ref(false)
+const modal = reactive<ModalState>({ show: false, title: '', body: '' })
+
+let interval: NodeJS.Timeout
+
+// منطق تایمر معکوس
+const startTimer = (duration: number) => {
+  clearInterval(interval)
+  timer.value = duration
+  isExpired.value = false
+  showResend.value = false
+  
+  interval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--
+      if (timer.value <= 60) showResend.value = true
+    } else {
+      isExpired.value = true
+      clearInterval(interval)
+    }
+  }, 1000)
+}
+
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+}
+
+// مدیریت فیلدها و جابجایی فوکوس
+const handleInput = (index: number, e: Event) => {
+  const target = e.target as HTMLInputElement
+  const val = target.value
+
+  if (!/^\d$/.test(val)) {
+    otpValues[index] = ''
+    return
+  }
+
+  errorMsg.value = ''
+  if (val && index < 5) {
+    inputs.value[index + 1].focus()
+  }
+
+  if (otpValues.every(v => v !== '')) {
+    checkCode()
+  }
+}
+
+const handleKeyDown = (index: number, e: KeyboardEvent) => {
+  if (e.key === 'Backspace' && !otpValues[index] && index > 0) {
+    inputs.value[index - 1].focus()
+  }
+}
+
+// منطق بررسی کد (دقیقا همان منطق ارسالی شما)
+const checkCode = async () => {
+  if (attempts.value >= 3) {
+    openModal("دسترسی محدود", "تعداد تلاش‌های شما بیش از حد مجاز بود.")
+    return
+  }
+
+  if (isExpired.value) {
+    openModal("کد منقضی شده", "زمان استفاده از این کد به پایان رسیده است.")
+    return
+  }
+
+  isLoading.value = true
+  const code = otpValues.join('')
+
+  // شبیه‌سازی تایید کد
+  setTimeout(() => {
+    isLoading.value = false
+    if (code === "123456") {
+      openModal("عملیات موفق", "کد تایید شد. در حال انتقال...")
+      setTimeout(() => navigateTo('/dashboard'), 2000)
+    } else {
+      attempts.value++
+      isShaking.value = true
+      errorMsg.value = `کد اشتباه است (تلاش ${attempts.value} از 3)`
+      otpValues.fill('')
+      inputs.value[0].focus()
+      setTimeout(() => isShaking.value = false, 500)
+    }
+  }, 2000)
+}
+
+const openModal = (title: string, body: string) => {
+  modal.title = title
+  modal.body = body
+  modal.show = true
+}
+
+const resendCode = () => {
+  attempts.value = 0
+  otpValues.fill('')
+  startTimer(120)
+}
+
+onMounted(() => startTimer(120))
+onUnmounted(() => clearInterval(interval))
+</script>
+
+<template>
+  <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
+    
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
+      
+      <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
+        <div class="absolute left-[-2px] top-[150px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all"></div>
+        
+        <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-95">
+          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" />
+          <span class="text-[11px]">ثبت نام </span>
+        </div>
+
+        <NuxtLink to="/login" class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition">
+          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" />
+          <span class="text-[11px]">ورود</span>
+        </NuxtLink>
+      </div>
+
+      <div class="hidden md:block w-[120px] my-[-15px] mx-3 bg-gradient-to-b from-[#031535] to-[#004282] rounded-[20px] shadow-lg overflow-hidden z-10">
+        <img src="~/assets/images/plane.png" class="w-full h-full object-cover" />
+      </div>
+
+      <div class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2 items-center text-center">
+        <h2 class="text-[#0a0a5e] font-bold text-lg mb-2">کد ۶ رقمی را وارد کنید</h2>
+        <p class="text-gray-400 text-[11px] mb-6">کد تایید به ایمیل شما ارسال گردید</p>
+
+        <div class="flex gap-2 mb-2" dir="ltr">
+          <input 
+            v-for="(_, i) in 6" :key="i"
+            ref="inputs"
+            v-model="otpValues[i]"
+            type="text" maxlength="1"
+            @input="handleInput(i, $event)"
+            @keydown="handleKeyDown(i, $event)"
+            class="w-10 h-12 md:w-11 md:h-14 text-center text-xl font-bold border-2 border-[#ebebeb] rounded-xl outline-none transition-all bg-[#ebebeb]/40 focus:border-[#0a0a5e] focus:bg-white"
+          />
+        </div>
+
+        <p class="text-red-500 text-[10px] h-4 mb-4 font-bold" :class="{ 'invisible': !errorMsg }">
+          {{ errorMsg }}
+        </p>
+
+        <div class="w-full max-w-[280px] flex justify-between items-center mb-6 text-[11px]">
+          <span :class="isExpired ? 'text-red-500' : 'text-[#0a0a5e]'" class="font-bold">
+            {{ formatTime(timer) }}
+          </span>
+          <button 
+            @click="resendCode"
+            :disabled="!showResend"
+            class="transition-colors"
+            :class="showResend ? 'text-[#2b2bb5] font-bold underline cursor-pointer' : 'text-gray-300 cursor-not-allowed'"
+          >
+            ارسال مجدد کد
+          </button>
+        </div>
+
+        <button 
+          @click="checkCode"
+          :disabled="otpValues.some(v => v === '') || isLoading"
+          class="w-full max-w-[280px] h-10 bg-[#0b0b54] text-white rounded-lg text-sm font-bold transition-all active:scale-95 disabled:bg-gray-300 flex items-center justify-center shadow-md"
+        >
+          <span v-if="!isLoading">تایید و ادامه</span>
+          <div v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        </button>
+      </div>
+
+    </div>
+
+    <Transition name="fade">
+      <div v-if="modal.show" class="fixed inset-0 bg-black/40 flex items-center justify-center z-[1000] p-4 backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-2xl text-center max-w-[280px] w-full shadow-2xl">
+          <h3 class="text-[#0a0a5e] font-bold text-base mb-2">{{ modal.title }}</h3>
+          <p class="text-gray-500 text-xs mb-6">{{ modal.body }}</p>
+          <button @click="modal.show = false" class="bg-[#0a0a5e] text-white py-2 rounded-lg w-full text-sm font-bold hover:bg-[#15158a] transition-colors">متوجه شدم</button>
+        </div>
+      </div>
+    </Transition>
+
+  </div>
+</template>
+
+<style scoped>
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>

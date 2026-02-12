@@ -14,9 +14,9 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 interface _GlobalComponents {
-  'AuthLoginFields': typeof import("../../app/components/auth/LoginFields.vue").default
-  'AuthOtpFields': typeof import("../../app/components/auth/OtpFields.vue").default
-  'AuthRegisterFields': typeof import("../../app/components/auth/RegisterFields.vue").default
+  'AuthLogin': typeof import("../../app/components/auth/Login.vue").default
+  'AuthOtp': typeof import("../../app/components/auth/Otp.vue").default
+  'AuthRegister': typeof import("../../app/components/auth/Register.vue").default
   'CapitalForm': typeof import("../../app/components/capital/CapitalForm.vue").default
   'CapitalHero': typeof import("../../app/components/capital/CapitalHero.vue").default
   'CapitalStats': typeof import("../../app/components/capital/CapitalStats.vue").default
@@ -52,9 +52,9 @@ interface _GlobalComponents {
   'Html': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Html
   'Body': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Body
   'NuxtIsland': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-island").default
-  'LazyAuthLoginFields': LazyComponent<typeof import("../../app/components/auth/LoginFields.vue").default>
-  'LazyAuthOtpFields': LazyComponent<typeof import("../../app/components/auth/OtpFields.vue").default>
-  'LazyAuthRegisterFields': LazyComponent<typeof import("../../app/components/auth/RegisterFields.vue").default>
+  'LazyAuthLogin': LazyComponent<typeof import("../../app/components/auth/Login.vue").default>
+  'LazyAuthOtp': LazyComponent<typeof import("../../app/components/auth/Otp.vue").default>
+  'LazyAuthRegister': LazyComponent<typeof import("../../app/components/auth/Register.vue").default>
   'LazyCapitalForm': LazyComponent<typeof import("../../app/components/capital/CapitalForm.vue").default>
   'LazyCapitalHero': LazyComponent<typeof import("../../app/components/capital/CapitalHero.vue").default>
   'LazyCapitalStats': LazyComponent<typeof import("../../app/components/capital/CapitalStats.vue").default>
