@@ -2,8 +2,6 @@
   <nav class="lg:hidden fixed bottom-6 inset-x-5 z-[999] dir-rtl">
     <div class="bg-white/90 backdrop-blur-md border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[24px] flex items-center justify-between px-2 h-16">
       
-      
-
       <NuxtLink to="/contact" class="nav-item">
         <div class="icon-wrapper">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -24,12 +22,12 @@
 
       <div class="relative flex-1 flex justify-center">
         <NuxtLink to="/" class="absolute -top-10 flex flex-col items-center group">
-          <div class="bg-teal-600 p-4 rounded-full shadow-lg shadow-teal-200 border-[6px] border-[#ebebeb] text-white active:scale-90 transition-all duration-300 group-[.router-link-exact-active]:bg-teal-700 group-[.router-link-exact-active]:scale-110">
+          <div class="bg-[#0a0a5e] p-4 rounded-full shadow-lg border-[6px] border-[#ebebeb] text-white active:scale-90 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
           </div>
-          <span class="mt-11 text-[11px] font-bold text-teal-700">خانه</span>
+          <span class="mt-11 text-[11px] font-bold text-[#0a0a5e]">خانه</span>
         </NuxtLink>
       </div>
 
@@ -42,7 +40,7 @@
         <span class="nav-text">درباره ما</span>
       </NuxtLink>
 
-      <NuxtLink to="/auth" class="nav-item">
+      <NuxtLink :to="isLoggedIn ? '/dashboard' : '/login'" class="nav-item">
         <div class="icon-wrapper">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -55,6 +53,39 @@
   </nav>
 </template>
 
+<script setup>
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRoute } from 'nuxt/app'
+
+const isLoggedIn = ref(false)
+const route = useRoute()
+
+// تابع بررسی وضعیت لاگین
+const checkAuth = () => {
+  if (process.client) {
+    const auth = localStorage.getItem('is_auth')
+    isLoggedIn.value = auth === 'true'
+  }
+}
+
+// گوش دادن به تغییر مسیر برای آپدیت وضعیت
+watch(() => route.fullPath, () => {
+  checkAuth()
+})
+
+onMounted(() => {
+  checkAuth()
+  // گوش دادن به رویدادهای تغییر وضعیت (مثل زدن دکمه خروج در داشبورد)
+  window.addEventListener('auth-change', checkAuth)
+  window.addEventListener('storage', checkAuth)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('auth-change', checkAuth)
+  window.removeEventListener('storage', checkAuth)
+})
+</script>
+
 <style scoped>
 .nav-item {
   @apply flex-1 flex flex-col items-center justify-center gap-1 transition-all duration-300;
@@ -65,11 +96,12 @@
 .nav-text {
   @apply text-[10px] font-medium text-slate-500 transition-all duration-300 whitespace-nowrap;
 }
-/* فعال شدن حاله سبز بر اساس روت */
+
+/* استایل فعال بودن لینک */
 .router-link-active .icon-wrapper {
-  @apply bg-teal-50 text-teal-600 shadow-inner;
+  @apply bg-blue-50 text-[#0a0a5e] shadow-inner;
 }
 .router-link-active .nav-text {
-  @apply text-teal-600 font-bold;
+  @apply text-[#0a0a5e] font-bold;
 }
 </style>

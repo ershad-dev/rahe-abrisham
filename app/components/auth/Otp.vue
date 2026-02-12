@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * @component OTPVerification
- * @description فعال شدن دکمه با اولین ورودی و تایید خودکار در پایان.
+ * @description تایید کد برای کاربران مختلف و انتقال هوشمند به داشبورد.
  */
 
 import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
@@ -27,9 +27,8 @@ const showResend = ref<boolean>(false)
 const isShaking = ref<boolean>(false)
 const modal = reactive<ModalState>({ show: false, title: '', body: '' })
 
-let interval: NodeJS.Timeout
+let interval: any
 
-// --- تایمر ---
 const startTimer = (duration: number) => {
   if (interval) clearInterval(interval)
   timer.value = duration
@@ -52,25 +51,18 @@ const formatTime = (seconds: number): string => {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
-// --- مدیریت اینپوت و تایید خودکار ---
 const handleInput = async (index: number, e: Event) => {
   const target = e.target as HTMLInputElement
   const val = target.value
-
   if (!/^\d$/.test(val)) {
     otpValues[index] = ''
     return
   }
-
   errorMsg.value = ''
-  
   if (val && index < 5) {
     inputs.value[index + 1].focus()
   }
-
   await nextTick()
-
-  // اگر تمام فیلدها پر شدند، تایید خودکار انجام شود
   if (otpValues.every(v => v !== '')) {
     checkCode()
   }
@@ -82,11 +74,10 @@ const handleKeyDown = (index: number, e: KeyboardEvent) => {
   }
 }
 
-// --- عملیات تایید ---
+// --- بخش اصلی: بررسی کد و مدیریت کاربران ---
 const checkCode = async () => {
   if (isLoading.value) return
 
-  // اگر کاربر دکمه را زد ولی هنوز کد کامل نیست
   if (otpValues.some(v => v === '')) {
     errorMsg.value = "لطفاً کد ۶ رقمی را کامل وارد کنید"
     return
@@ -105,11 +96,25 @@ const checkCode = async () => {
   isLoading.value = true
   const code = otpValues.join('')
 
+  // شبیه‌سازی درخواست به سرور
   setTimeout(() => {
     isLoading.value = false
+    
     if (code === "123456") {
-      openModal("عملیات موفق", "کد تایید شد. در حال انتقال...")
-      setTimeout(() => router.push('/'), 2000)
+      // ۱. گرفتن ایمیلی که در مرحله لاگین ذخیره شده بود
+      const pendingUser = localStorage.getItem('pending_user_email') || 'user@example.com';
+
+      // ۲. ثبت نهایی برای ورود به داشبورد
+      localStorage.setItem('user_name', pendingUser); // ذخیره ایمیل به عنوان نام نمایشی
+      localStorage.setItem('is_auth', 'true');
+      
+      // پاکسازی حافظه موقت لاگین
+      localStorage.removeItem('pending_user_email');
+
+      openModal("خوش آمدید", `هویت شما به عنوان ${pendingUser} تایید شد.`);
+      
+      // ۳. انتقال به داشبورد
+      setTimeout(() => router.push('/dashboard'), 1500)
     } else {
       attempts.value++
       isShaking.value = true
@@ -134,7 +139,14 @@ const resendCode = () => {
   if (inputs.value[0]) inputs.value[0].focus()
 }
 
-onMounted(() => startTimer(120))
+onMounted(() => {
+  // چک کردن اینکه آیا اصلاً ایمیلی از صفحه لاگین آمده یا نه
+  if (!localStorage.getItem('pending_user_email')) {
+    router.push('/login')
+  }
+  startTimer(120)
+})
+
 onUnmounted(() => clearInterval(interval))
 </script>
 
@@ -146,11 +158,11 @@ onUnmounted(() => clearInterval(interval))
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
           <img src="~/assets/images/plane.png" class="w-5 h-5" />
-          <span class="text-[12px] font-bold">ثبت نام</span>
+          <span class="text-[12px] font-bold">تایید کد</span>
         </div>
         <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center gap-1 text-gray-400 opacity-60">
           <img src="~/assets/images/plane.png" class="w-5 h-5" />
-          <span class="text-[12px] font-bold">ورود</span>
+          <span class="text-[12px] font-bold">برگشت</span>
         </NuxtLink>
       </div>
 
@@ -158,11 +170,11 @@ onUnmounted(() => clearInterval(interval))
         <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all"></div>
         <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90">
           <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" />
-          <span class="text-[11px]">ثبت نام</span>
+          <span class="text-[11px]">تایید</span>
         </div>
         <NuxtLink to="/login" class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition">
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" />
-          <span class="text-[11px]">ورود</span>
+          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1 rotate-180" />
+          <span class="text-[11px]">خروج</span>
         </NuxtLink>
       </div>
 
@@ -172,7 +184,7 @@ onUnmounted(() => clearInterval(interval))
 
       <div class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2 items-center text-center">
         <h2 class="text-[#0a0a5e] font-bold text-lg mb-1">تایید هویت</h2>
-        <p class="text-gray-400 text-[11px] mb-6">کد ۶ رقمی ارسال شده را وارد کنید</p>
+        <p class="text-gray-400 text-[11px] mb-6">کد ۶ رقمی ارسال شده به ایمیل را وارد کنید</p>
 
         <div class="flex gap-2 mb-2" dir="ltr">
           <input 
@@ -203,7 +215,7 @@ onUnmounted(() => clearInterval(interval))
 
         <button 
           @click="checkCode" 
-          :disabled="otpValues.every(v => v === '') || isLoading" 
+          :disabled="otpValues.some(v => v === '') || isLoading" 
           class="w-full max-w-[280px] h-10 bg-[#0b0b54] text-white rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:bg-gray-300 flex items-center justify-center"
         >
           <span v-if="!isLoading">تایید و ادامه</span>
@@ -223,3 +235,16 @@ onUnmounted(() => clearInterval(interval))
     </Transition>
   </div>
 </template>
+
+<style scoped>
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
