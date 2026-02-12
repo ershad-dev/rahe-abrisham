@@ -1,8 +1,7 @@
 <script setup lang="ts">
 /**
  * @component OTPVerification
- * @description مدیریت تایید کد یکبار مصرف. 
- * ناوبری: در موبایل و دسکتاپ به عنوان زیرمجموعه "ثبت‌نام" نمایش داده می‌شود.
+ * @description مدیریت تایید کد یکبار مصرف با قابلیت جابجایی خودکار فوکوس و ناوبری ریسپانسیو.
  */
 
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
@@ -32,7 +31,7 @@ const modal = reactive<ModalState>({ show: false, title: '', body: '' })
 
 let interval: NodeJS.Timeout
 
-// --- منطق تایمر ---
+// --- منطق تایمر معکوس ---
 
 const startTimer = (duration: number) => {
   if (interval) clearInterval(interval)
@@ -57,12 +56,13 @@ const formatTime = (seconds: number): string => {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
-// --- تعاملات ورودی ---
+// --- تعاملات ورودی (جابجایی خودکار فوکوس) ---
 
 const handleInput = (index: number, e: Event) => {
   const target = e.target as HTMLInputElement
   const val = target.value
 
+  // فقط اجازه ورود عدد
   if (!/^\d$/.test(val)) {
     otpValues[index] = ''
     return
@@ -70,16 +70,19 @@ const handleInput = (index: number, e: Event) => {
 
   errorMsg.value = ''
   
+  // انتقال فوکوس به فیلد بعدی
   if (val && index < 5) {
     inputs.value[index + 1].focus()
   }
 
+  // اگر تمام فیلدها پر شدند، تایید خودکار (اختیاری) یا آماده‌سازی برای دکمه تایید
   if (otpValues.every(v => v !== '')) {
-    checkCode()
+    // checkCode() // می‌توانید این را فعال کنید تا پس از پر شدن آخرین فیلد، کد خودکار بررسی شود
   }
 }
 
 const handleKeyDown = (index: number, e: KeyboardEvent) => {
+  // اگر دکمه Backspace زده شد و فیلد خالی بود، به فیلد قبلی برگردد
   if (e.key === 'Backspace' && !otpValues[index] && index > 0) {
     inputs.value[index - 1].focus()
   }
@@ -104,7 +107,7 @@ const checkCode = async () => {
   setTimeout(() => {
     isLoading.value = false
     if (code === "123456") {
-      openModal("عملیات موفق", "کد تایید شد. در حال انتقال...")
+      openModal("عملیات موفق", "کد تایید شد. در حال انتقال به پنل کاربری...")
       setTimeout(() => router.push('/'), 2000)
     } else {
       attempts.value++
@@ -184,6 +187,8 @@ onUnmounted(() => clearInterval(interval))
             type="text" 
             maxlength="1"
             inputmode="numeric" 
+            @input="handleInput(i, $event)"
+            @keydown="handleKeyDown(i, $event)"
             class="w-10 h-12 md:w-11 md:h-14 text-center text-xl font-bold border-2 border-[#ebebeb] rounded-xl outline-none transition-all bg-[#ebebeb]/40 focus:border-[#0a0a5e] focus:bg-white"
           />
         </div>
@@ -196,12 +201,16 @@ onUnmounted(() => clearInterval(interval))
           <span :class="timer < 30 ? 'text-red-500' : 'text-[#0a0a5e]'" class="font-bold">
             {{ formatTime(timer) }}
           </span>
-          <button @click="resendCode" :disabled="!showResend" class="transition-colors" :class="showResend ? 'text-[#2b2bb5] font-bold underline' : 'text-gray-300'">
+          <button @click="resendCode" :disabled="!showResend" class="transition-colors" :class="showResend ? 'text-[#2b2bb5] font-bold underline cursor-pointer' : 'text-gray-300 cursor-not-allowed'">
             ارسال مجدد کد
           </button>
         </div>
 
-        <button @click="checkCode" :disabled="otpValues.some(v => v === '') || isLoading" class="w-full max-w-[280px] h-10 bg-[#0b0b54] text-white rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-50">
+        <button 
+          @click="checkCode" 
+          :disabled="otpValues.some(v => v === '') || isLoading" 
+          class="w-full max-w-[280px] h-10 bg-[#0b0b54] text-white rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center"
+        >
           <span v-if="!isLoading">تایید و ادامه</span>
           <div v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
         </button>
@@ -214,7 +223,7 @@ onUnmounted(() => clearInterval(interval))
         <div class="bg-white p-6 rounded-2xl text-center max-w-[280px] w-full shadow-2xl">
           <h3 class="text-[#0a0a5e] font-bold text-base mb-2">{{ modal.title }}</h3>
           <p class="text-gray-500 text-xs mb-6">{{ modal.body }}</p>
-          <button @click="modal.show = false" class="bg-[#0a0a5e] text-white py-2 rounded-lg w-full text-sm font-bold">متوجه شدم</button>
+          <button @click="modal.show = false" class="bg-[#0a0a5e] text-white py-2 rounded-lg w-full text-sm font-bold hover:bg-[#15158a] transition-colors">متوجه شدم</button>
         </div>
       </div>
     </Transition>
