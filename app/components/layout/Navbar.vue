@@ -15,7 +15,7 @@
             {{ isLoggedIn ? 'پنل کاربری' : 'ورود / ثبت‌نام' }}
           </span>
           <img v-if="!isLoggedIn" src="~/assets/images/prof.png" alt="login" class="h-5 w-5 opacity-70">
-          <div v-else class="w-6 h-6 bg-[#0a0a5e] text-white rounded-md flex items-center justify-center text-[10px] font-bold pt-[3px]">
+          <div v-else class="w-6 h-6 bg-[#0a0a5e] text-white rounded-md flex items-center justify-center text-[10px] font-bold pt-[2px]">
             {{ userInitial }}
           </div>
         </NuxtLink>
