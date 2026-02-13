@@ -26,7 +26,7 @@ const backgroundImage = computed(() => {
   const currentPath = route.path
 
   // . لیست صفحاتی که هدر نباید در آن‌ها نمایش داده شود
-  const authPages = ['/login', '/register', '/otp','/dashboard','/auth' ]
+  const authPages = ['/login', '/register', '/otp','/dashboard','/capital','/auth' ]
   if (authPages.includes(currentPath)) {
     return null
   }

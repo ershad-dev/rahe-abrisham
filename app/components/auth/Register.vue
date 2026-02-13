@@ -104,7 +104,7 @@ const submit = async () => {
         <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all duration-500"></div>
         
         <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90 cursor-default">
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" />
+          <img src="~/assets/images/sign.png" class="w-6 h-6 mb-1" />
           <span class="text-[11px]">ثبت نام</span>
         </div>
         
@@ -112,7 +112,7 @@ const submit = async () => {
           to="/login" 
           class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition-all duration-300 group"
         >
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1 group-hover:-translate-y-1 transition-transform" />
+          <img src="~/assets/images/login.png" class="w-6 h-6 mb-1 group-hover:-translate-y-1 transition-transform" />
           <span class="text-[11px] font-medium">ورود</span>
         </NuxtLink>
       </div>

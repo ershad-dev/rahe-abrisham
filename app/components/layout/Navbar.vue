@@ -13,7 +13,7 @@
           </span>
           <img 
             v-if="!isLoggedIn" 
-            src="~/assets/images/import.png" 
+            src="~/assets/images/prof.png" 
             alt="login"  
             class="h-5 w-5 opacity-70"
           >

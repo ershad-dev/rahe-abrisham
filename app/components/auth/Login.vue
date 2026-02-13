@@ -114,11 +114,11 @@ const handleLogin = async () => {
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
         <div class="absolute left-[-2px] top-[185px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all duration-300"></div>
         <NuxtLink to="/register" class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition">
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" alt="ثبت نام" />
+          <img src="~/assets/images/sign.png" class="w-6 h-6 mb-1" alt="ثبت نام" />
           <span class="text-[11px]">ثبت نام</span>
         </NuxtLink>
         <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90">
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" alt="ورود" />
+          <img src="~/assets/images/login.png" class="w-6 h-6 mb-1" alt="ورود" />
           <span class="text-[11px]">ورود</span>
         </div>
       </div>

@@ -157,11 +157,11 @@ onUnmounted(() => clearInterval(interval))
       
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
-          <img src="~/assets/images/plane.png" class="w-5 h-5" />
+          <img src="~/assets/images/sign.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">تایید کد</span>
         </div>
         <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center gap-1 text-gray-400 opacity-60">
-          <img src="~/assets/images/plane.png" class="w-5 h-5" />
+          <img src="~/assets/images/login.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">برگشت</span>
         </NuxtLink>
       </div>
@@ -169,12 +169,12 @@ onUnmounted(() => clearInterval(interval))
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
         <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all"></div>
         <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90">
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1" />
-          <span class="text-[11px]">تایید</span>
+          <img src="~/assets/images/sign.png" class="w-6 h-6 mb-1" />
+          <span class="text-[11px]">ثبت نام</span>
         </div>
         <NuxtLink to="/login" class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition">
-          <img src="~/assets/images/plane.png" class="w-6 h-6 mb-1 rotate-180" />
-          <span class="text-[11px]">خروج</span>
+          <img src="~/assets/images/login.png" class="w-6 h-6 mb-1 " />
+          <span class="text-[11px]">ورود</span>
         </NuxtLink>
       </div>
 
