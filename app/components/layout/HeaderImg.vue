@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-
+//عکس های ایمپودت شده
 import bgLanding from '~/assets/images/landing-bg.jpg'
 import bgAbout from '~/assets/images/about-bg.png'
 import bgContact from '~/assets/images/cantact-bg.png'

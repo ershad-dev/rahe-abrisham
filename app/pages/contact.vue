@@ -191,20 +191,18 @@ const handleSubmit = (): void => {
 
   // ارسال نهایی در صورت نبود خطا
   if (isValid) {
-    // تبدیل دیتای پروکسی شده به دیتای خام برای ارسال به API
+    // تبدیل دیتای پروکسی شده به دیتای خام برای ارسال به ای پی آی
     const cleanData = toRaw(formData);
     console.log("در حال ارسال داده‌ها به سمت سرور:", cleanData);
     
     alert("فرم با موفقیت ثبت شد.");
     
-    // در صورت تمایل می‌توانید فیلدها را اینجا ریست کنید:
-    // Object.assign(formData, { message: '', fullname: '', email: '', phone: '' });
   }
 };
 </script>
 
 <style>
-/* انیمیشن دقیق fadeInUp برای استفاده در کلاس‌های تیلوند */
+/* انیمیشن دقیق (فید این اپ )برای استفاده در کلاس‌های تیلوند */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }

@@ -1,121 +1,6 @@
 <!-- 
-  ⚠️ فایل تستی –   شبیه‌سازی فلو ورود کاربر
   این کامپوننت در مرحله پروداکشن باید با احراز هویت واقعی سرور جایگزین شود.
 -->
-
-<script setup lang="ts">
-/**
- * صفحه ورود (Login Page)
- * در حال حاضر نقش دمو دارد: لاگین با داده‌های ساختگی (mockUsers)،
- * ارسال ایمیل به مرحله OTP، و ذخیره بخشی از اطلاعات در لوکال استوریج فقط برای تست.
- */
-
-import { reactive, ref, onMounted } from 'vue'
-import { useRouter, useRoute } from 'nuxt/app'
-
-// --- ابزارهای مسیر‌یابی برای انتقال بین صفحات (مثلاً otp/register)
-const router = useRouter()
-
-
-// --- تعریف ساختار داده فرم 
-interface LoginForm {
-  email: string
-  password: string
-  rememberMe: boolean
-}
-
-// --- ری اکتیو استیت برای فرم ورودی کاربر
-const form = reactive<LoginForm>({
-  email: '',
-  password: '',
-  rememberMe: false
-})
-
-// --- کنترل‌های عمومی وضعیت صفحه
-const error = ref<string>('')      // پیام خطا
-const isShaking = ref<boolean>(false) // حالت انیمیشن خطا
-const isLoading = ref<boolean>(false) // حالت لودینگ هنگام لاگین
-
-// --- کاربران تستی (Mock) فقط برای شبیه‌سازی فلو
-const mockUsers = [
-  { email: 'erd@gmail.com', password: '1234' },
-  { email: 'ali@gmail.com', password: '1111' },
-  { email: 'mahdi@gmail.com', password: '2222' },
-  { email: 'mobina@gmail.com', password: '3333' }
-]
-
-// --- در اولین بار، ایمیل ذخیره شده در لوکال استوریج بازیابی می‌شود (برای ری ممبر می)
-onMounted(() => {
-  const savedEmail = localStorage.getItem('userEmail')
-  if (savedEmail) {
-    form.email = savedEmail
-    form.rememberMe = true
-  }
-})
-
-// --- توابع انیمیشن خطا هنگام لاگین ناموفق
-const triggerErrorAnimation = () => {
-  isShaking.value = true
-  setTimeout(() => (isShaking.value = false), 500)
-}
-
-/**
- * تابع اصلی ورود کاربر
- * ۱. اعتبارسنجی اولیه فیلدها
- * ۲. شبیه‌سازی تأخیر شبکه (setTimeout)
- * ۳. بررسی کاربر در mockUsers
- * ۴. هدایت به صفحه OTP در صورت موفقیت
- */
-const handleLogin = async () => {
-  error.value = ''
-
-  // --- بررسی اولیه: ایمیل و رمز باید پر باشند
-  if (!form.email || !form.password) {
-    error.value = 'لطفاً ایمیل و رمز عبور را وارد کنید'
-    triggerErrorAnimation()
-    return
-  }
-
-  // --- شروع لودینگ
-  isLoading.value = true
-
-  try {
-    // --- تأخیر مصنوعی برای شبیه‌سازی درخواست به سرور
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // --- بررسی کاربر در لیست تستی
-    const foundUser = mockUsers.find(
-      u => u.email === form.email.trim().toLowerCase() && u.password === form.password
-    )
-
-    if (foundUser) {
-      // ذخیره اطلاعات برای مرحله او تی پی
-      localStorage.setItem('pending_user_email', foundUser.email)
-
-      // --- در صورت فعال بودن (ری ممبر می)، ایمیل ذخیره شود
-      if (form.rememberMe) {
-        localStorage.setItem('userEmail', form.email.trim())
-      } else {
-        localStorage.removeItem('userEmail')
-      }
-
-      // --- هدایت به صفحه OTP
-      router.push('/otp')
-    } else {
-      // --- درصورت لاگین ناموفق
-      error.value = 'ایمیل یا رمز عبور اشتباه است'
-      triggerErrorAnimation()
-    }
-  } catch (err) {
-    // --- درصورت بروز خطای پیش‌بینی‌نشده
-    error.value = 'خطایی در سیستم رخ داده است'
-    triggerErrorAnimation()
-  } finally {
-    // --- در انتها حالت لودینگ خاموش شود
-    isLoading.value = false
-  }
-}
-</script>
 
 <template>
   <div
@@ -227,6 +112,119 @@ const handleLogin = async () => {
     </div>
   </div>
 </template>
+
+
+
+<script setup lang="ts">
+
+
+import { reactive, ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'nuxt/app'
+
+// --- ابزارهای مسیر‌یابی برای انتقال بین صفحات (مثلاً otp/register)
+const router = useRouter()
+
+
+// --- تعریف ساختار داده فرم 
+interface LoginForm {
+  email: string
+  password: string
+  rememberMe: boolean
+}
+
+// --- ری اکتیو استیت برای فرم ورودی کاربر
+const form = reactive<LoginForm>({
+  email: '',
+  password: '',
+  rememberMe: false
+})
+
+// --- کنترل‌های عمومی وضعیت صفحه
+const error = ref<string>('')      // پیام خطا
+const isShaking = ref<boolean>(false) // حالت انیمیشن خطا
+const isLoading = ref<boolean>(false) // حالت لودینگ هنگام لاگین
+
+// --- کاربران تستی (Mock) فقط برای شبیه‌سازی فلو
+const mockUsers = [
+  { email: 'erd@gmail.com', password: '1234' },
+  { email: 'ali@gmail.com', password: '1111' },
+  { email: 'mahdi@gmail.com', password: '2222' },
+  { email: 'mobina@gmail.com', password: '3333' }
+]
+
+// --- در اولین بار، ایمیل ذخیره شده در لوکال استوریج بازیابی می‌شود (برای ری ممبر می)
+onMounted(() => {
+  const savedEmail = localStorage.getItem('userEmail')
+  if (savedEmail) {
+    form.email = savedEmail
+    form.rememberMe = true
+  }
+})
+
+// --- توابع انیمیشن خطا هنگام لاگین ناموفق
+const triggerErrorAnimation = () => {
+  isShaking.value = true
+  setTimeout(() => (isShaking.value = false), 500)
+}
+
+/**
+ * تابع اصلی ورود کاربر
+ * ۱. اعتبارسنجی اولیه فیلدها
+ * ۲. شبیه‌سازی تأخیر شبکه (setTimeout)
+ * ۳. بررسی کاربر در mockUsers
+ * ۴. هدایت به صفحه OTP در صورت موفقیت
+ */
+const handleLogin = async () => {
+  error.value = ''
+
+  // --- بررسی اولیه: ایمیل و رمز باید پر باشند
+  if (!form.email || !form.password) {
+    error.value = 'لطفاً ایمیل و رمز عبور را وارد کنید'
+    triggerErrorAnimation()
+    return
+  }
+
+  // --- شروع لودینگ
+  isLoading.value = true
+
+  try {
+    // --- تأخیر مصنوعی برای شبیه‌سازی درخواست به سرور
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
+    // --- بررسی کاربر در لیست تستی
+    const foundUser = mockUsers.find(
+      u => u.email === form.email.trim().toLowerCase() && u.password === form.password
+    )
+
+    if (foundUser) {
+      // ذخیره اطلاعات برای مرحله او تی پی
+      localStorage.setItem('pending_user_email', foundUser.email)
+
+      // --- در صورت فعال بودن (ری ممبر می)، ایمیل ذخیره شود
+      if (form.rememberMe) {
+        localStorage.setItem('userEmail', form.email.trim())
+      } else {
+        localStorage.removeItem('userEmail')
+      }
+
+      // --- هدایت به صفحه OTP
+      router.push('/otp')
+    } else {
+      // --- درصورت لاگین ناموفق
+      error.value = 'ایمیل یا رمز عبور اشتباه است'
+      triggerErrorAnimation()
+    }
+  } catch (err) {
+    // --- درصورت بروز خطای پیش‌بینی‌نشده
+    error.value = 'خطایی در سیستم رخ داده است'
+    triggerErrorAnimation()
+  } finally {
+    // --- در انتها حالت لودینگ خاموش شود
+    isLoading.value = false
+  }
+}
+</script>
+
 
 <style scoped>
 /* --- انیمیشن (فید این) برای نمایش ملایم فرم --- */

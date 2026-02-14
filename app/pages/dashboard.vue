@@ -1,45 +1,4 @@
-<script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'nuxt/app'
 
-const router = useRouter()
-const userEmail = ref<string>('کاربر')
-
-/** استخراج نام نمایشی */
-const displayName = computed(() => {
-  if (userEmail.value.includes('@')) {
-    return userEmail.value.split('@')[0]
-  }
-  return userEmail.value
-})
-
-const userInitial = computed(() => displayName.value.charAt(0).toUpperCase())
-
-onMounted(() => {
-  const isAuth = localStorage.getItem('is_auth')
-  const savedName = localStorage.getItem('user_name')
-
-  if (!isAuth || !savedName) {
-    router.push('/login')
-  } else {
-    userEmail.value = savedName
-  }
-})
-
-/** خروج و اطلاع‌رسانی به ناوبر */
-const logout = () => {
-  localStorage.removeItem('is_auth')
-  localStorage.removeItem('user_name')
-  localStorage.removeItem('pending_user_email')
-  
-  // شلیک رویداد برای اینکه ناوبر بلافاصله متوجه خروج شود
-  if (process.client) {
-    window.dispatchEvent(new Event('auth-change'))
-  }
-  
-  router.push('/')
-}
-</script>
 
 <template>
   <div class="min-h-screen pt-16 bg-[#f4f7fa] inte-font" dir="rtl">
@@ -117,6 +76,49 @@ const logout = () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'nuxt/app'
+
+const router = useRouter()
+const userEmail = ref<string>('کاربر')
+
+/** استخراج نام نمایشی */
+const displayName = computed(() => {
+  if (userEmail.value.includes('@')) {
+    return userEmail.value.split('@')[0]
+  }
+  return userEmail.value
+})
+
+const userInitial = computed(() => displayName.value.charAt(0).toUpperCase())
+
+onMounted(() => {
+  const isAuth = localStorage.getItem('is_auth')
+  const savedName = localStorage.getItem('user_name')
+
+  if (!isAuth || !savedName) {
+    router.push('/login')
+  } else {
+    userEmail.value = savedName
+  }
+})
+
+/** خروج و اطلاع‌رسانی به ناوبر */
+const logout = () => {
+  localStorage.removeItem('is_auth')
+  localStorage.removeItem('user_name')
+  localStorage.removeItem('pending_user_email')
+  
+  // شلیک رویداد برای اینکه ناوبر بلافاصله متوجه خروج شود
+  if (process.client) {
+    window.dispatchEvent(new Event('auth-change'))
+  }
+  
+  router.push('/')
+}
+</script>
 
 <style scoped>
 @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
