@@ -103,7 +103,7 @@ const userInitial = computed(() => {
 onMounted(() => {
   if (process.client) {
     userName.value = localStorage.getItem('user_name') || 'کاربر'
-    userPhone.value = localStorage.getItem('user_phone') || '---'
+    userPhone.value = localStorage.getItem('user_phone') || ''
     if (localStorage.getItem('is_auth') !== 'true') { router.push('/login') }
   }
 })
@@ -121,8 +121,7 @@ const confirmLogout = () => {
 </script>
 
 <style scoped>
-/* کدهای استایل قبلی خودت دست‌نخورده باقی ماند */
-.inte-font { font-family: 'Tahoma', sans-serif; }
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .bg-gradient-to-l:hover img { transform: scale(1.1) rotate(0deg); opacity: 0.2; transition: all 0.5s ease; }
 </style>
