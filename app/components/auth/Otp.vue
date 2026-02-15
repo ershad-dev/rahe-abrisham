@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
-    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px]  rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
           <img src="~/assets/images/sign.png" class="w-5 h-5" />
@@ -42,7 +42,7 @@
             inputmode="numeric" 
             @input="handleInput(i, $event)"
             @keydown="handleKeyDown(i, $event)"
-            class="w-10 h-12 md:w-11 md:h-14 text-center text-xl font-bold border-2 border-[#ebebeb] rounded-xl outline-none transition-all bg-[#ebebeb]/40 focus:border-[#0a0a5e] focus:bg-white"
+            class="w-10 h-12 md:w-11 md:h-14 text-center text-xl font-bold border-2 border-[#0a0a5e] rounded-xl outline-none transition-all bg-wight/40 focus:border-[#0a0a5e] focus:bg-white"
           />
         </div>
 

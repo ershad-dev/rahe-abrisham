@@ -1,21 +1,14 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
+  <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr mt-[38px]">
     
-    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:min-h-[440px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:min-h-[440px]  rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
       
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
-        <NuxtLink 
-          to="/register" 
-          class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]"
-        >
+        <NuxtLink to="/register" class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
           <img src="~/assets/images/sign.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">ثبت نام</span>
         </NuxtLink>
-        
-        <NuxtLink 
-          to="/login" 
-          class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 text-gray-400 opacity-60"
-        >
+        <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 text-gray-400 opacity-60">
           <img src="~/assets/images/login.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">ورود</span>
         </NuxtLink>
@@ -23,16 +16,11 @@
 
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
         <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all duration-500"></div>
-        
         <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90 cursor-default">
           <img src="~/assets/images/sign.png" class="w-6 h-6 mb-1" />
           <span class="text-[11px]">ثبت نام</span>
         </div>
-        
-        <NuxtLink 
-          to="/login" 
-          class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition-all duration-300 group"
-        >
+        <NuxtLink to="/login" class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition-all duration-300 group">
           <img src="~/assets/images/login.png" class="w-6 h-6 mb-1 group-hover:-translate-y-1 transition-transform" />
           <span class="text-[11px] font-medium">ورود</span>
         </NuxtLink>
@@ -48,14 +36,33 @@
           <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px] text-right">
             {{ fieldLabels[field] }}
           </label>
-          <input 
-            v-model="form[field]" 
-            :type="field === 'password' ? 'password' : (field === 'email' ? 'email' : (field === 'phone' ? 'tel' : 'text'))"
-            class="w-full h-12 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-white placeholder:text-gray-300"
-            :dir="(field === 'username') ? 'rtl' : 'ltr'"
-            :placeholder="field === 'email' ? 'example@mail.com (اختیاری)' : (field === 'phone' ? '09123456789' : '')"
-            @input="field === 'phone' ? handlePhoneInput($event) : null"
-          />
+          
+          <div class="relative">
+            <input 
+              v-model="form[field]" 
+              :type="getInputType(field)"
+              class="w-full h-12 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-white placeholder:text-gray-300"
+              :class="{'pl-12': field === 'password' || field === 'confirmPassword'}"
+              :dir="(field === 'username') ? 'rtl' : 'ltr'"
+              :placeholder="field === 'phone' ? '09123456789' : ''"
+              @input="field === 'phone' ? handlePhoneInput($event) : null"
+            />
+            
+            <button 
+              v-if="field === 'password' || field === 'confirmPassword'"
+              type="button"
+              @click="toggleVisibility(field)"
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0a0a5e] transition-colors"
+            >
+              <svg v-if="isPasswordVisible(field)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <p v-if="error" class="text-red-500 text-[11px] text-center mb-1 font-bold animate-pulse">
@@ -78,146 +85,100 @@
   </div>
 </template>
 
-
-
-
 <script setup lang="ts">
-
-
 import { reactive, ref } from 'vue'
-import { useRouter, useRoute } from 'nuxt/app'
+import { useRouter } from 'nuxt/app'
 
-
-
-/**
- * ساختار فرم ثبت‌نام
- * فقط برای مدیریت استیت در سمت فرانت
- */
 interface RegisterForm {
   username: string;
   phone: string;
-  email: string;
   password: string;
+  confirmPassword: string;
 }
 
-// روتر برای هدایت به او تی پی
 const router = useRouter()
+const form = reactive<RegisterForm>({ username: '', phone: '', password: '', confirmPassword: '' })
+const error = ref('')
+const isShaking = ref(false)
+const isLoading = ref(false)
 
-// استیت اصلی فرم ثبت‌نام
-const form = reactive<RegisterForm>({ 
-  username: '', 
-  phone: '', 
-  email: '', 
-  password: '' 
-})
+// استیت‌های نمایش پسورد
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 
-// پیام خطا
-const error = ref<string>('')
-
-// فعال‌سازی انیمیشن شیک هنگام خطا
-const isShaking = ref<boolean>(false)
-
-// وضعیت لودینگ دکمه ارسال
-const isLoading = ref<boolean>(false)
-
-// ترتیب فیلدها برای رندر داینامیک
-const fieldNames: (keyof RegisterForm)[] = ['username', 'phone', 'email', 'password']
-
-// لیبل فارسی هر فیلد
+const fieldNames: (keyof RegisterForm)[] = ['username', 'phone', 'password', 'confirmPassword']
 const fieldLabels: Record<keyof RegisterForm, string> = {
   username: 'نام کاربری',
   phone: 'شماره موبایل',
-  email: 'ایمیل',
-  password: 'رمز عبور'
+  password: 'رمز عبور',
+  confirmPassword: 'تکرار رمز عبور'
 }
 
-// --- متدها ---
+// توابع کمکی برای مدیریت نوع اینپوت و آیکون
+const getInputType = (field: keyof RegisterForm) => {
+  if (field === 'phone') return 'tel'
+  if (field === 'password') return showPassword.value ? 'text' : 'password'
+  if (field === 'confirmPassword') return showConfirmPassword.value ? 'text' : 'password'
+  return 'text'
+}
 
-/**
- * مدیریت ورودی شماره تلفن
- * فقط عدد و حداکثر ۱۱ رقم
- */
+const isPasswordVisible = (field: keyof RegisterForm) => {
+  return field === 'password' ? showPassword.value : showConfirmPassword.value
+}
+
+const toggleVisibility = (field: keyof RegisterForm) => {
+  if (field === 'password') showPassword.value = !showPassword.value
+  if (field === 'confirmPassword') showConfirmPassword.value = !showConfirmPassword.value
+}
+
 const handlePhoneInput = (event: Event) => {
   const input = event.target as HTMLInputElement;
-  // حذف هر چیزی که عدد نیست
   let value = input.value.replace(/\D/g, '');
-  // محدودیت ۱۱ رقم
-  if (value.length > 11) {
-    value = value.slice(0, 11);
-  }
+  if (value.length > 11) value = value.slice(0, 11);
   form.phone = value;
 };
 
-/**
- * نمایش خطا به همراه انیمیشن شیک
- */
 const triggerError = (msg: string) => {
   error.value = msg
   isShaking.value = true
   setTimeout(() => isShaking.value = false, 500)
 }
 
-/**
- * ارسال فرم ثبت‌نام
- * شامل اعتبارسنجی ساده و انتقال به او تی پی
- */
 const submit = async () => {
   error.value = ''
-  
-  // بررسی پر بودن فیلدهای ضروری
-  if (!form.username || !form.phone || !form.password) {
+  if (!form.username || !form.phone || !form.password || !form.confirmPassword) {
     triggerError('لطفاً تمامی فیلدها را پر کنید')
     return
   }
-
-  // بررسی طول شماره موبایل
   if (form.phone.length < 11) {
     triggerError('شماره موبایل باید ۱۱ رقم باشد')
     return
   }
+  if (form.password !== form.confirmPassword) {
+    triggerError('رمز عبور و تکرار آن با هم مطابقت ندارند')
+    return
+  }
 
   isLoading.value = true
-  
-// ... داخل تابع submit در فایل ثبت‌نام
-try {
-  await new Promise(resolve => setTimeout(resolve, 1200))
-
-  // ذخیره اطلاعات برای استفاده در صفحه OTP
-  localStorage.setItem('pending_user_phone', form.phone)
-  
-  // این خط را حتماً اضافه کن تا نام واقعی کاربر ذخیره شود
-  localStorage.setItem('pending_display_name', form.username) 
-  
-  await router.push('/otp')
-}
-
-catch (err) {
-    // خطای عمومی (تستی)
-    error.value = 'خطایی در ثبت‌نام رخ داد. دوباره تلاش کنید.'
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1200))
+    localStorage.setItem('pending_user_phone', form.phone)
+    localStorage.setItem('pending_display_name', form.username) 
+    await router.push('/otp')
+  } catch (err) {
+    error.value = 'خطایی در ثبت‌نام رخ داد.'
   } finally {
     isLoading.value = false
   }
 }
 </script>
 
-
-
 <style scoped>
-/* انیمیشن ورود کارت */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* انیمیشن خطا */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes shake {
   10%, 90% { transform: translate3d(-1px, 0, 0); }
   20%, 80% { transform: translate3d(2px, 0, 0); }
   30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
 }
-
-.shake {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-}
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
 </style>

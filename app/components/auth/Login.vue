@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
-    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible text-right">
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] mt-[50px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible text-right">
       
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <NuxtLink to="/register" class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 text-gray-400 opacity-60">
@@ -44,13 +44,28 @@
 
         <div class="mb-3">
           <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px]">رمز عبور</label>
-          <input 
-            v-model="form.password" 
-            type="password" 
-            dir="ltr" 
-            placeholder="••••" 
-            class="w-full h-12 rounded-full border border-gray-200 px-4 text-[15px] outline-none focus:border-[#0a0a5e] bg-[#ebebeb]/40 focus:bg-white transition-all"
-          />
+          <div class="relative">
+            <input 
+              v-model="form.password" 
+              :type="showPassword ? 'text' : 'password'" 
+              dir="ltr" 
+              placeholder="••••" 
+              class="w-full h-12 rounded-full border border-gray-200 pl-12 pr-4 text-[15px] outline-none focus:border-[#0a0a5e] bg-[#ebebeb]/40 focus:bg-white transition-all"
+            />
+            <button 
+              type="button" 
+              @click="showPassword = !showPassword"
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0a0a5e] transition-colors"
+            >
+              <svg v-if="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div class="flex justify-between items-center text-[10px] mb-3 px-2">
@@ -81,17 +96,14 @@ const router = useRouter()
 const error = ref('')
 const isShaking = ref(false)
 const isLoading = ref(false)
+const showPassword = ref(false) // استیت جدید برای چشمی
 
-// استیت فرم
 const form = reactive({
   phone: '',
   password: '',
   rememberMe: false
 })
 
-/**
- * لیست کاربران تستی درخواستی شما
- */
 const mockUsers = [
   { phone: '09157962833', password: '1234', username: 'erd' },
   { phone: '0912456789', password: '1111', username: 'ali' }
@@ -105,7 +117,6 @@ onMounted(() => {
   }
 })
 
-// فیلتر کردن ورودی موبایل (فقط عدد و ۱۱ رقم)
 const handlePhoneInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
   let val = target.value.replace(/\D/g, '');
@@ -115,7 +126,6 @@ const handlePhoneInput = (e: Event) => {
 
 const handleLogin = async () => {
   error.value = ''
-  
   if (!form.phone || !form.password) {
     error.value = 'لطفاً شماره موبایل و رمز را وارد کنید'
     isShaking.value = true; setTimeout(() => isShaking.value = false, 500);
@@ -123,26 +133,17 @@ const handleLogin = async () => {
   }
 
   isLoading.value = true
-  
-  // شبیه‌سازی درخواست به سرور
   setTimeout(() => {
     isLoading.value = false
-    
-    // پیدا کردن کاربر در لیست تستی
     const foundUser = mockUsers.find(u => u.phone === form.phone && u.password === form.password)
-
     if (foundUser) {
-      // ذخیره اطلاعات برای عبور از گارد صفحه OTP
       localStorage.setItem('pending_user_phone', foundUser.phone)
       localStorage.setItem('pending_display_name', foundUser.username)
-      
       if (form.rememberMe) {
         localStorage.setItem('userPhone', form.phone)
       } else {
         localStorage.removeItem('userPhone')
       }
-      
-      // هدایت به صفحه تایید کد
       router.push('/otp')
     } else {
       error.value = 'شماره موبایل یا رمز عبور اشتباه است'

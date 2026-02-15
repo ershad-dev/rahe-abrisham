@@ -1,14 +1,12 @@
-
-
 <template>
   <div class="min-h-screen pt-16 bg-[#f4f7fa] inte-font" dir="rtl">
     <header class="bg-white border-b  border-[#ebebeb] h-16 flex items-center justify-between px-6  top-0 left-0 w-full z-50 shadow-sm">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10  bg-[#0a0a5e] rounded-full flex items-center justify-center text-white font-bold shadow-lg uppercase transition-transform hover:scale-105">
+        <div class="w-10 h-10 bg-[#0a0a5e] rounded-full flex items-center justify-center text-white font-bold shadow-lg uppercase transition-transform hover:scale-105">
           {{ userInitial }}
         </div>
         <div>
-          <h2 class="text-[#0a0a5e] font-bold text-sm leading-none">{{ userName }} </h2>
+          <h2 class="text-[#0a0a5e] font-bold text-sm leading-none">{{ userName }}</h2>
           <span class="text-[10px] text-green-500 font-medium flex items-center gap-1">
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
             آنلاین
@@ -17,7 +15,7 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <button @click="logout" class="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors group">
+        <button @click="showLogoutConfirm = true" class="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors group">
           <span class="text-xs font-bold hidden sm:inline">خروج</span>
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -40,7 +38,7 @@
           </div>
         </nav>
 
-        <button @click="logout" class="mt-auto p-3 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-xl text-sm font-bold transition-all flex items-center gap-3 border border-transparent hover:border-red-100">
+        <button @click="showLogoutConfirm = true" class="mt-auto p-3 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-xl text-sm font-bold transition-all flex items-center gap-3 border border-transparent hover:border-red-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
@@ -52,14 +50,8 @@
         <div class="max-w-5xl mx-auto">
           <div class="bg-gradient-to-l from-[#0a0a5e] to-[#2b2bb5] rounded-[30px] p-8 text-white relative overflow-hidden shadow-xl mb-8 animate-[fadeIn_0.5s_ease-out]">
             <div class="relative z-10">
-              <h1 class="text-2xl md:text-3xl font-bold mb-2">
-                    خوش آمدید، {{ userName }} عزیز
-
-              </h1>
-              <p class="text-blue-100 text-sm opacity-80">
-                    شماره تلفن شما ({{ userPhone }}) تایید شد.
-
-              </p>
+              <h1 class="text-2xl md:text-3xl font-bold mb-2">خوش آمدید، {{ userName }} عزیز</h1>
+              <p class="text-blue-100 text-sm opacity-80">شماره تلفن شما ({{ userPhone }}) تایید شد.</p>
             </div>
             <img src="~/assets/images/plane.png" class="absolute left-[-20px] bottom-[-20px] w-48 opacity-10 -rotate-12" />
           </div>
@@ -80,6 +72,18 @@
         </div>
       </main>
     </div>
+
+    <div v-if="showLogoutConfirm" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div @click="showLogoutConfirm = false" class="absolute inset-0 bg-[#031535]/30 backdrop-blur-sm"></div>
+      <div class="relative bg-white w-full max-w-[340px] rounded-[24px] p-6 shadow-2xl text-center border border-[#ebebeb]">
+        <h3 class="text-[#0a0a5e] font-bold text-lg mb-2">خروج از حساب</h3>
+        <p class="text-gray-400 text-sm mb-6">آیا برای خروج مطمئن هستید؟</p>
+        <div class="flex gap-3">
+          <button @click="confirmLogout" class="flex-1 py-3 bg-red-500 text-white rounded-xl font-bold text-xs hover:bg-red-600 transition-all">خروج</button>
+          <button @click="showLogoutConfirm = false" class="flex-1 py-3 bg-[#f4f7fa] text-[#0a0a5e] rounded-xl font-bold text-xs border border-[#ebebeb]">انصراف</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -87,70 +91,38 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'nuxt/app'
 
-// تعریف روتر برای جابجایی بین صفحات
 const router = useRouter()
-
-// تعریف متغیرهای واکنشی (Reactive)
 const userName = ref('')
 const userPhone = ref('')
+const showLogoutConfirm = ref(false) // متغیر جدید
 
-/** * گرفتن حرف اول نام برای نمایش در دایره پروفایل 
- * اگر نام موجود نباشد، حرف 'ک' (مخفف کاربر) را برمی‌گرداند
- */
 const userInitial = computed(() => {
   return userName.value ? userName.value.charAt(0) : 'ک'
 })
 
-// اجرای کدها هنگام لود شدن کامپوننت
 onMounted(() => {
-  // اگر در محیط کلاینت هستیم اطلاعات را از حافظه بخوان
   if (process.client) {
     userName.value = localStorage.getItem('user_name') || 'کاربر'
     userPhone.value = localStorage.getItem('user_phone') || '---'
-    
-    // اگر کاربر وارد نشده بود، اجازه نده در داشبورد بماند
-    if (localStorage.getItem('is_auth') !== 'true') {
-      router.push('/login')
-    }
+    if (localStorage.getItem('is_auth') !== 'true') { router.push('/login') }
   }
 })
 
-/**
- * عملیات خروج از حساب کاربری
- */
-const logout = () => {
-  // ۱. پاکسازی کامل تمام کلیدهای مربوط به احراز هویت
+const confirmLogout = () => {
   localStorage.removeItem('is_auth')
   localStorage.removeItem('user_name')
   localStorage.removeItem('user_phone')
   localStorage.removeItem('pending_user_phone')
   localStorage.removeItem('pending_display_name')
-
-  // ۲. شلیک رویداد برای آپدیت شدن آنی هدر یا سایر بخش‌های سایت
-  if (process.client) {
-    window.dispatchEvent(new Event('auth-change'))
-  }
-
-  // ۳. هدایت کاربر به صفحه اصلی یا لاگین
+  if (process.client) { window.dispatchEvent(new Event('auth-change')) }
+  showLogoutConfirm.value = false
   router.push('/')
 }
 </script>
 
 <style scoped>
-/* اضافه کردن فونت و انیمیشن برای زیبایی بیشتر */
-.inte-font {
-  font-family: 'Tahoma', sans-serif; /* می‌توانید فونت اصلی خود را جایگزین کنید */
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* افکت هاور برای بخش خوش‌آمدگویی */
-.bg-gradient-to-l:hover img {
-  transform: scale(1.1) rotate(0deg);
-  opacity: 0.2;
-  transition: all 0.5s ease;
-}
+/* کدهای استایل قبلی خودت دست‌نخورده باقی ماند */
+.inte-font { font-family: 'Tahoma', sans-serif; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.bg-gradient-to-l:hover img { transform: scale(1.1) rotate(0deg); opacity: 0.2; transition: all 0.5s ease; }
 </style>
