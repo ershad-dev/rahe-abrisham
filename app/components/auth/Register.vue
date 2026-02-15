@@ -1,13 +1,8 @@
-
-
 <template>
-  <!-- صفحه ثبت‌نام -->
   <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
     
-    <!-- کارت اصلی ثبت‌نام -->
-    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:min-h-[440px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
       
-      <!-- هدر موبایل -->
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <NuxtLink 
           to="/register" 
@@ -26,7 +21,6 @@
         </NuxtLink>
       </div>
 
-      <!-- ستون مراحل (دسکتاپ) -->
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
         <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all duration-500"></div>
         
@@ -44,42 +38,38 @@
         </NuxtLink>
       </div>
 
-      <!-- تصویر وسط (دسکتاپ) -->
       <div class="hidden md:block w-[120px] my-[-15px] mx-3 bg-gradient-to-b from-[#031535] to-[#004282] rounded-[20px] shadow-lg overflow-hidden z-10">
         <img src="~/assets/images/plane.png" class="w-full h-full object-cover shadow-inner" />
       </div>
 
-      <!-- فرم ثبت‌نام -->
       <form @submit.prevent="submit" class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2">
         
-        <!-- فیلدهای فرم -->
         <div v-for="field in fieldNames" :key="field" class="mb-3">
           <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px] text-right">
             {{ fieldLabels[field] }}
           </label>
           <input 
             v-model="form[field]" 
-            :type="field === 'password' ? 'password' : field === 'email' ? 'email' : 'text'"
-            class="w-full h-10 rounded-full border border-gray-200 px-4 text-[13px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-white placeholder:text-gray-300"
-            :dir="field !== 'username' ? 'ltr' : 'rtl'"
-            :placeholder="field === 'email' ? 'example@mail.com' : ''"
+            :type="field === 'password' ? 'password' : (field === 'email' ? 'email' : (field === 'phone' ? 'tel' : 'text'))"
+            class="w-full h-12 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-white placeholder:text-gray-300"
+            :dir="(field === 'username') ? 'rtl' : 'ltr'"
+            :placeholder="field === 'email' ? 'example@mail.com (اختیاری)' : (field === 'phone' ? '09123456789' : '')"
+            @input="field === 'phone' ? handlePhoneInput($event) : null"
           />
         </div>
 
-        <!-- پیام خطا -->
         <p v-if="error" class="text-red-500 text-[11px] text-center mb-1 font-bold animate-pulse">
           {{ error }}
         </p>
 
-        <!-- دکمه ارسال فرم -->
         <button 
           type="submit" 
           :disabled="isLoading"
-          class="w-full h-10 bg-[#0b0b54] text-white text-sm font-bold rounded-lg hover:bg-[#15158a] transition-all active:scale-95 mt-2 shadow-md disabled:opacity-70 flex items-center justify-center overflow-hidden"
+          class="w-full h-12 bg-[#0b0b54] text-white text-base font-bold rounded-lg hover:bg-[#15158a] transition-all active:scale-95 mt-2 shadow-md disabled:opacity-70 flex items-center justify-center overflow-hidden"
         >
           <span v-if="!isLoading">تایید و ثبت نام</span>
           <div v-else class="flex items-center gap-2">
-            <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             <span class="text-[12px]">در حال پردازش...</span>
           </div>
         </button>
@@ -105,6 +95,7 @@ import { useRouter, useRoute } from 'nuxt/app'
  */
 interface RegisterForm {
   username: string;
+  phone: string;
   email: string;
   password: string;
 }
@@ -115,6 +106,7 @@ const router = useRouter()
 // استیت اصلی فرم ثبت‌نام
 const form = reactive<RegisterForm>({ 
   username: '', 
+  phone: '', 
   email: '', 
   password: '' 
 })
@@ -129,16 +121,32 @@ const isShaking = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 
 // ترتیب فیلدها برای رندر داینامیک
-const fieldNames: (keyof RegisterForm)[] = ['username', 'email', 'password']
+const fieldNames: (keyof RegisterForm)[] = ['username', 'phone', 'email', 'password']
 
 // لیبل فارسی هر فیلد
 const fieldLabels: Record<keyof RegisterForm, string> = {
   username: 'نام کاربری',
+  phone: 'شماره موبایل',
   email: 'ایمیل',
   password: 'رمز عبور'
 }
 
 // --- متدها ---
+
+/**
+ * مدیریت ورودی شماره تلفن
+ * فقط عدد و حداکثر ۱۱ رقم
+ */
+const handlePhoneInput = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  // حذف هر چیزی که عدد نیست
+  let value = input.value.replace(/\D/g, '');
+  // محدودیت ۱۱ رقم
+  if (value.length > 11) {
+    value = value.slice(0, 11);
+  }
+  form.phone = value;
+};
 
 /**
  * نمایش خطا به همراه انیمیشن شیک
@@ -156,36 +164,34 @@ const triggerError = (msg: string) => {
 const submit = async () => {
   error.value = ''
   
-  // بررسی پر بودن تمام فیلدها
-  const isFormInvalid = fieldNames.some(key => !form[key])
-  if (isFormInvalid) {
+  // بررسی پر بودن فیلدهای ضروری
+  if (!form.username || !form.phone || !form.password) {
     triggerError('لطفاً تمامی فیلدها را پر کنید')
     return
   }
 
-  // بررسی ساده فرمت ایمیل (که فعلا بررسی میکنه @ داشته باشه یا نه )
-  if (!form.email.includes('@')) {
-    triggerError('لطفاً یک ایمیل معتبر وارد کنید')
+  // بررسی طول شماره موبایل
+  if (form.phone.length < 11) {
+    triggerError('شماره موبایل باید ۱۱ رقم باشد')
     return
   }
 
   isLoading.value = true
   
-  try {
-    // شبیه‌سازی درخواست سرور (Mock)
-    await new Promise(resolve => setTimeout(resolve, 1200))
+// ... داخل تابع submit در فایل ثبت‌نام
+try {
+  await new Promise(resolve => setTimeout(resolve, 1200))
 
-    /**
-     * ذخیره ایمیل کاربر
-     * برای استفاده در:
-     * - صفحه اوتی پی
-     * - داشبورد بعد از تایید
-     */
-    localStorage.setItem('pending_user_email', form.email.toLowerCase())
-    
-    // انتقال به مرحله تایید کد
-    await router.push('/otp')
-  } catch (err) {
+  // ذخیره اطلاعات برای استفاده در صفحه OTP
+  localStorage.setItem('pending_user_phone', form.phone)
+  
+  // این خط را حتماً اضافه کن تا نام واقعی کاربر ذخیره شود
+  localStorage.setItem('pending_display_name', form.username) 
+  
+  await router.push('/otp')
+}
+
+catch (err) {
     // خطای عمومی (تستی)
     error.value = 'خطایی در ثبت‌نام رخ داد. دوباره تلاش کنید.'
   } finally {

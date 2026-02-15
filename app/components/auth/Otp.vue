@@ -1,9 +1,6 @@
-
-
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
     <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible">
-      <!-- هدر موبایل -->
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
           <img src="~/assets/images/sign.png" class="w-5 h-5" />
@@ -15,7 +12,6 @@
         </NuxtLink>
       </div>
 
-      <!-- تب ها  (دسکتاپ) -->
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
         <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all"></div>
         <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90">
@@ -28,17 +24,14 @@
         </NuxtLink>
       </div>
 
-      <!-- تصویر وسط (دسکتاپ) -->
       <div class="hidden md:block w-[120px] my-[-15px] mx-3 bg-gradient-to-b from-[#031535] to-[#004282] rounded-[20px] shadow-lg overflow-hidden z-10">
         <img src="~/assets/images/plane.png" class="w-full h-full object-cover" />
       </div>
 
-      <!-- فرم ورود کد -->
       <div class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2 items-center text-center">
         <h2 class="text-[#0a0a5e] font-bold text-lg mb-1">تایید هویت</h2>
-        <p class="text-gray-400 text-[11px] mb-6">کد ۶ رقمی ارسال شده به ایمیل را وارد کنید</p>
+        <p class="text-gray-400 text-[11px] mb-6">کد ۶ رقمی ارسال شده به شماره همراه را وارد کنید</p>
 
-        <!-- اینپوت‌های او تی پی -->
         <div class="flex gap-2 mb-2" dir="ltr">
           <input 
             v-for="(_, i) in 6" :key="i"
@@ -53,12 +46,10 @@
           />
         </div>
 
-        <!-- پیام خطا -->
         <p class="text-red-500 text-[10px] h-4 mb-4 font-bold" :class="{ 'invisible': !errorMsg }">
           {{ errorMsg }}
         </p>
 
-        <!-- تایمر و ارسال مجدد -->
         <div class="w-full max-w-[280px] flex justify-between items-center mb-6 text-[11px]">
           <span :class="timer < 30 ? 'text-red-500' : 'text-[#0a0a5e]'" class="font-bold">
             {{ formatTime(timer) }}
@@ -68,7 +59,6 @@
           </button>
         </div>
 
-        <!-- دکمه تایید -->
         <button 
           @click="checkCode" 
           :disabled="otpValues.some(v => v === '') || isLoading" 
@@ -80,7 +70,6 @@
       </div>
     </div>
     
-    <!-- مودال پیام -->
     <Transition name="fade">
       <div v-if="modal.show" class="fixed inset-0 bg-black/40 flex items-center justify-center z-[1000] p-4 backdrop-blur-sm">
         <div class="bg-white p-6 rounded-2xl text-center max-w-[280px] w-full shadow-2xl">
@@ -235,17 +224,20 @@ const checkCode = async () => {
     isLoading.value = false
     
     if (code === "123456") {
-      // ۱. گرفتن ایمیلی که در مرحله لاگین ذخیره شده بود
-      const pendingUser = localStorage.getItem('pending_user_email') || 'user@example.com';
-
+      // ۱. گرفتن موبایل و نام کاربری که در مرحله لاگین/ثبت‌نام ذخیره شده بود
+      const pendingPhone = localStorage.getItem('pending_user_phone') || '09120000000';
+      const displayName = localStorage.getItem('pending_display_name') || 'کاربر جدید';
+      openModal("خوش آمدید", `${displayName} عزیز، هویت شما ... تایید شد.`);
       // ۲. ثبت نهایی وضعیت احراز هویت
-      localStorage.setItem('user_name', pendingUser);
+      localStorage.setItem('user_phone', pendingPhone);
+      localStorage.setItem('user_name', displayName);
       localStorage.setItem('is_auth', 'true');
       
       // پاکسازی حافظه موقت
-      localStorage.removeItem('pending_user_email');
+      localStorage.removeItem('pending_user_phone');
+      localStorage.removeItem('pending_display_name');
 
-      openModal("خوش آمدید", `هویت شما به عنوان ${pendingUser} تایید شد.`);
+      openModal("خوش آمدید", `${displayName} عزیز، هویت شما ... تایید شد.`);
       
       // ۳. انتقال به داشبورد
       setTimeout(() => router.push('/dashboard'), 1500)
@@ -278,8 +270,8 @@ const resendCode = () => {
 
 // اجرای اولیه هنگام ورود به صفحه
 onMounted(() => {
-  // جلوگیری از ورود مستقیم بدون مرحله لاگین
-  if (!localStorage.getItem('pending_user_email')) {
+  // جلوگیری از ورود مستقیم بدون مرحله لاگین (حالا بر اساس شماره چک می‌شود)
+  if (!localStorage.getItem('pending_user_phone')) {
     router.push('/login')
   }
   startTimer(120)

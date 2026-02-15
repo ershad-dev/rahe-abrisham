@@ -8,7 +8,7 @@
           {{ userInitial }}
         </div>
         <div>
-          <h2 class="text-[#0a0a5e] font-bold text-sm leading-none">{{ displayName }} عزیز</h2>
+          <h2 class="text-[#0a0a5e] font-bold text-sm leading-none">{{ userName }} </h2>
           <span class="text-[10px] text-green-500 font-medium flex items-center gap-1">
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
             آنلاین
@@ -52,8 +52,14 @@
         <div class="max-w-5xl mx-auto">
           <div class="bg-gradient-to-l from-[#0a0a5e] to-[#2b2bb5] rounded-[30px] p-8 text-white relative overflow-hidden shadow-xl mb-8 animate-[fadeIn_0.5s_ease-out]">
             <div class="relative z-10">
-              <h1 class="text-2xl md:text-3xl font-bold mb-2">سلام، {{ displayName }} عزیز!</h1>
-              <p class="text-blue-100 text-sm opacity-80">خوش آمدید. ایمیل شما ({{ userEmail }}) تایید شده است.</p>
+              <h1 class="text-2xl md:text-3xl font-bold mb-2">
+                    خوش آمدید، {{ userName }} عزیز
+
+              </h1>
+              <p class="text-blue-100 text-sm opacity-80">
+                    شماره تلفن شما ({{ userPhone }}) تایید شد.
+
+              </p>
             </div>
             <img src="~/assets/images/plane.png" class="absolute left-[-20px] bottom-[-20px] w-48 opacity-10 -rotate-12" />
           </div>
@@ -78,48 +84,73 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'nuxt/app'
 
+// تعریف روتر برای جابجایی بین صفحات
 const router = useRouter()
-const userEmail = ref<string>('کاربر')
 
-/** استخراج نام نمایشی */
-const displayName = computed(() => {
-  if (userEmail.value.includes('@')) {
-    return userEmail.value.split('@')[0]
-  }
-  return userEmail.value
+// تعریف متغیرهای واکنشی (Reactive)
+const userName = ref('')
+const userPhone = ref('')
+
+/** * گرفتن حرف اول نام برای نمایش در دایره پروفایل 
+ * اگر نام موجود نباشد، حرف 'ک' (مخفف کاربر) را برمی‌گرداند
+ */
+const userInitial = computed(() => {
+  return userName.value ? userName.value.charAt(0) : 'ک'
 })
 
-const userInitial = computed(() => displayName.value.charAt(0).toUpperCase())
-
+// اجرای کدها هنگام لود شدن کامپوننت
 onMounted(() => {
-  const isAuth = localStorage.getItem('is_auth')
-  const savedName = localStorage.getItem('user_name')
-
-  if (!isAuth || !savedName) {
-    router.push('/login')
-  } else {
-    userEmail.value = savedName
+  // اگر در محیط کلاینت هستیم اطلاعات را از حافظه بخوان
+  if (process.client) {
+    userName.value = localStorage.getItem('user_name') || 'کاربر'
+    userPhone.value = localStorage.getItem('user_phone') || '---'
+    
+    // اگر کاربر وارد نشده بود، اجازه نده در داشبورد بماند
+    if (localStorage.getItem('is_auth') !== 'true') {
+      router.push('/login')
+    }
   }
 })
 
-/** خروج و اطلاع‌رسانی به ناوبر */
+/**
+ * عملیات خروج از حساب کاربری
+ */
 const logout = () => {
+  // ۱. پاکسازی کامل تمام کلیدهای مربوط به احراز هویت
   localStorage.removeItem('is_auth')
   localStorage.removeItem('user_name')
-  localStorage.removeItem('pending_user_email')
-  
-  // شلیک رویداد برای اینکه ناوبر بلافاصله متوجه خروج شود
+  localStorage.removeItem('user_phone')
+  localStorage.removeItem('pending_user_phone')
+  localStorage.removeItem('pending_display_name')
+
+  // ۲. شلیک رویداد برای آپدیت شدن آنی هدر یا سایر بخش‌های سایت
   if (process.client) {
     window.dispatchEvent(new Event('auth-change'))
   }
-  
+
+  // ۳. هدایت کاربر به صفحه اصلی یا لاگین
   router.push('/')
 }
 </script>
 
 <style scoped>
-@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+/* اضافه کردن فونت و انیمیشن برای زیبایی بیشتر */
+.inte-font {
+  font-family: 'Tahoma', sans-serif; /* می‌توانید فونت اصلی خود را جایگزین کنید */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* افکت هاور برای بخش خوش‌آمدگویی */
+.bg-gradient-to-l:hover img {
+  transform: scale(1.1) rotate(0deg);
+  opacity: 0.2;
+  transition: all 0.5s ease;
+}
 </style>
