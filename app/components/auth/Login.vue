@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
-    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] mt-[50px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible text-right">
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] mt-[50px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible text-right bg-white">
       
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
         <NuxtLink to="/register" class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 text-gray-400 opacity-60">
@@ -30,19 +30,18 @@
       </div>
 
       <form @submit.prevent="handleLogin" class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2">
-        <div class="mb-3">
-          <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px]">شماره موبایل</label>
+        <div class="mb-3 text-right">
+          <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px]">پست الکترونیک (ایمیل)</label>
           <input 
-            v-model="form.phone" 
-            type="tel" 
+            v-model="form.email" 
+            type="email" 
             dir="ltr" 
-            placeholder="09123456789" 
+            placeholder="example@mail.com" 
             class="w-full h-12 rounded-full border border-gray-200 px-4 text-[15px] outline-none focus:border-[#0a0a5e] bg-[#ebebeb]/40 focus:bg-white transition-all"
-            @input="handlePhoneInput"
           />
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 text-right">
           <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px]">رمز عبور</label>
           <div class="relative">
             <input 
@@ -68,9 +67,9 @@
           </div>
         </div>
 
-        <div class="flex justify-between items-center text-[10px] mb-3 px-2">
-          <NuxtLink to="/forgot-password" class="text-[#0a0a5e] hover:underline">فراموشی رمز عبور</NuxtLink>
-          <label class="flex items-center gap-1.5 cursor-pointer text-[#0a0a5e]">
+        <div class="flex justify-between items-center text-[10px] mb-3 px-2 text-right">
+          <NuxtLink to="/forgot-password" class="text-[#0a0a5e] hover:underline font-bold">فراموشی رمز عبور</NuxtLink>
+          <label class="flex items-center gap-1.5 cursor-pointer text-[#0a0a5e] font-bold">
             <span>مرا به خاطر بسپار</span>
             <input type="checkbox" v-model="form.rememberMe" class="hidden peer">
             <div class="w-3.5 h-3.5 border-2 border-[#2b2bb5] rounded-[3px] relative peer-checked:bg-[#2b2bb5] after:content-['✔'] after:absolute after:text-white after:text-[8px] after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:hidden peer-checked:after:block"></div>
@@ -90,76 +89,96 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { useRouter } from 'nuxt/app'
 
-const router = useRouter()
 const error = ref('')
 const isShaking = ref(false)
 const isLoading = ref(false)
-const showPassword = ref(false) // استیت جدید برای چشمی
+const showPassword = ref(false)
 
 const form = reactive({
-  phone: '',
+  email: '',
   password: '',
   rememberMe: false
 })
 
+// اضافه کردن فیلد phone به دیتای کاربران آزمایشی
 const mockUsers = [
-  { phone: '09157962833', password: '1234', username: 'erd' },
-  { phone: '09123456789', password: '1111', username: 'ali' }
+  { email: 'erd@gmail.com', password: '1234', username: 'ارشاد', phone: '09157962833' },
+  { email: 'admin@gmail.com', password: '1111', username: 'علی', phone: '09123456789' }
 ]
 
 onMounted(() => {
-  const savedPhone = localStorage.getItem('userPhone')
-  if (savedPhone) {
-    form.phone = savedPhone
-    form.rememberMe = true
+  if (process.client) {
+    const savedEmail = localStorage.getItem('userEmail')
+    if (savedEmail) {
+      form.email = savedEmail
+      form.rememberMe = true
+    }
   }
 })
 
-const handlePhoneInput = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  let val = target.value.replace(/\D/g, '');
-  if (val.length > 11) val = val.slice(0, 11);
-  form.phone = val;
-}
-
 const handleLogin = async () => {
   error.value = ''
-  if (!form.phone || !form.password) {
-    error.value = 'لطفاً شماره موبایل و رمز را وارد کنید'
-    isShaking.value = true; setTimeout(() => isShaking.value = false, 500);
+  
+  if (!form.email || !form.password) {
+    error.value = 'لطفاً ایمیل و رمز را وارد کنید'
+    triggerShake()
     return
   }
 
   isLoading.value = true
-  setTimeout(() => {
-    isLoading.value = false
-    const foundUser = mockUsers.find(u => u.phone === form.phone && u.password === form.password)
-    if (foundUser) {
-      localStorage.setItem('pending_user_phone', foundUser.phone)
-      localStorage.setItem('pending_display_name', foundUser.username)
-      if (form.rememberMe) {
-        localStorage.setItem('userPhone', form.phone)
-      } else {
-        localStorage.removeItem('userPhone')
-      }
-      router.push('/otp')
+
+  // شبیه‌سازی انتظار شبکه
+  await new Promise(resolve => setTimeout(resolve, 1000))
+
+  const foundUser = mockUsers.find(u => u.email === form.email && u.password === form.password)
+  
+  if (foundUser) {
+    // ذخیره تمامی کلیدهای مورد نیاز برای داشبورد
+    localStorage.setItem('isLoggedIn', 'true')
+    localStorage.setItem('display_name', foundUser.username)
+    localStorage.setItem('user_email', foundUser.email)
+    localStorage.setItem('user_phone', foundUser.phone) // ذخیره شماره موبایل
+    
+    if (form.rememberMe) {
+      localStorage.setItem('userEmail', form.email)
     } else {
-      error.value = 'شماره موبایل یا رمز عبور اشتباه است'
-      isShaking.value = true
-      setTimeout(() => isShaking.value = false, 500)
+      localStorage.removeItem('userEmail')
     }
-  }, 1000)
+
+    if (process.client) {
+      window.dispatchEvent(new Event('auth-change'))
+    }
+
+    isLoading.value = false
+    // استفاده از window.location برای اطمینان از ریفرش شدن استیت‌ها در داشبورد
+    window.location.href = '/dashboard'
+  } else {
+    isLoading.value = false
+    error.value = 'ایمیل یا رمز عبور اشتباه است'
+    triggerShake()
+  }
+}
+
+const triggerShake = () => {
+  isShaking.value = true
+  setTimeout(() => isShaking.value = false, 500)
 }
 </script>
 
 <style scoped>
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(10px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+
 @keyframes shake { 
   10%, 90% { transform: translate3d(-1px, 0, 0); } 
   20%, 80% { transform: translate3d(2px, 0, 0); } 
   30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 
 }
-.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+.shake { 
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; 
+}
 </style>

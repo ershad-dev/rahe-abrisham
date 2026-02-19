@@ -7,13 +7,13 @@
       
       <div class="flex items-center gap-3">
         <NuxtLink 
-          :key="isLoggedIn"
           :to="isLoggedIn ? '/dashboard' : '/login'" 
           class="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1 rounded-lg shadow-sm hover:bg-gray-50 transition text-slate-700 shrink-0"
         >
           <span class="text-sm font-bold">
             {{ isLoggedIn ? 'پنل کاربری' : 'ورود / ثبت‌نام' }}
           </span>
+          
           <img v-if="!isLoggedIn" src="~/assets/images/prof.png" alt="login" class="h-5 w-5 opacity-70">
           <div v-else class="w-6 h-6 bg-[#0a0a5e] text-white rounded-md flex items-center justify-center text-[10px] font-bold pt-[2px]">
             {{ userInitial }}
@@ -22,38 +22,7 @@
 
         <div class="w-[1.5px] h-5 bg-[#ebebeb] hidden xs:block"></div>
 
-        <div class="flex items-center relative">
-          <button @click="isSearchOpen = !isSearchOpen" class="p-1.5 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center">
-            <img 
-              v-if="!isSearchOpen" 
-              src="~/assets/images/search.png" 
-              alt="Search" 
-              class="w-6 h-6 object-contain opacity-70"
-            >
-            <img 
-              v-else 
-              src="~/assets/images/x.webp" 
-              alt="Close" 
-              class="w-6 h-6 object-contain"
-            >
-          </button>
 
-          <div 
-            class="hidden md:flex items-center overflow-hidden transition-all duration-500 ease-in-out h-9"
-            :class="[isSearchOpen ? 'max-w-[320px] opacity-100 mr-2' : 'max-w-0 opacity-0']"
-          >
-            <div class="relative flex items-center w-[300px]">
-              <input 
-                type="text" 
-                placeholder="دنبال چی می گردی؟" 
-                class="w-full h-8 bg-gray-100 border border-gray-200 rounded-lg pr-4 pl-12 text-xs outline-none focus:border-[#0a0a5e] transition-colors"
-              >
-              <button class="absolute left-1 bg-[#0a0a5e] text-white text-[10px] px-2 py-1 rounded-md hover:bg-blue-900 transition-colors">
-                جستجو
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="flex items-center gap-3 flex-1 justify-end">
@@ -79,21 +48,7 @@
       </div>
     </div>
 
-    <transition name="search-slide">
-      <div v-if="isSearchOpen" class="md:hidden px-4 pb-4 bg-white">
-        <div class="w-full h-[1px] bg-[#ebebeb] mb-3"></div>
-        <div class="flex gap-2">
-          <input 
-            type="text" 
-            placeholder="دنبال چی می گردی؟" 
-            class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-xs outline-none focus:border-[#0a0a5e]"
-          >
-          <button class="bg-[#0a0a5e] text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-transform">
-            جستجو
-          </button>
-        </div>
-      </div>
-    </transition>
+
 
     <transition name="fade-slide">
       <div v-if="isOpen" class="lg:hidden fixed inset-x-0 top-[52px] bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xl z-[100]">
@@ -123,20 +78,25 @@ const isLoggedIn = ref(false)
 const userName = ref('')
 const route = useRoute()
 
-/** بررسی وضعیت احراز هویت */
+/** * بررسی وضعیت احراز هویت از LocalStorage
+ * هماهنگ با کلیدهای استفاده شده در صفحات Login و Dashboard
+ */
 const checkAuth = () => {
   if (process.client) {
-    const auth = localStorage.getItem('is_auth')
-    const name = localStorage.getItem('user_name')
-    isLoggedIn.value = auth === 'true'
-    userName.value = name || ''
+    const authStatus = localStorage.getItem('isLoggedIn')
+    const storedName = localStorage.getItem('display_name')
+    
+    isLoggedIn.value = authStatus === 'true'
+    userName.value = storedName || ''
   }
 }
 
-/** نام کاربر برای آواتار */
-const userInitial = computed(() => userName.value ? userName.value.charAt(0).toUpperCase() : 'U')
+/** استخراج حرف اول نام برای نمایش در آواتار */
+const userInitial = computed(() => {
+  return userName.value ? userName.value.charAt(0) : 'U'
+})
 
-/** نظارت بر تغییر مسیر برای ریست کردن وضعیت‌ها */
+/** بستن منوها هنگام تغییر صفحه */
 watch(() => route.fullPath, () => {
   checkAuth()
   isSearchOpen.value = false
@@ -144,27 +104,40 @@ watch(() => route.fullPath, () => {
 })
 
 onMounted(() => {
+  // بررسی وضعیت در اولین لود
   checkAuth()
-  window.addEventListener('auth-change', checkAuth)
-  window.addEventListener('storage', checkAuth)
+  
+  // گوش دادن به تغییرات وضعیت لاگین که از صفحات دیگر صادر می‌شود
+  if (process.client) {
+    window.addEventListener('auth-change', checkAuth)
+    
+    // اگر کاربر در یک تب دیگر لاگ‌آوت کند، این تب هم متوجه می‌شود
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'isLoggedIn' || e.key === 'display_name') {
+        checkAuth()
+      }
+    })
+  }
 })
 
+/** پاکسازی Listenerها برای بهینه سازی حافظه */
 onBeforeUnmount(() => {
-  window.removeEventListener('auth-change', checkAuth)
-  window.removeEventListener('storage', checkAuth)
+  if (process.client) {
+    window.removeEventListener('auth-change', checkAuth)
+    window.removeEventListener('storage', checkAuth)
+  }
 })
 </script>
 
 <style scoped>
-/* انیمیشن باز شدن منو */
+/* انیمیشن‌های منو */
 .fade-slide-enter-active, .fade-slide-leave-active { transition: all 0.3s ease; }
 .fade-slide-enter-from, .fade-slide-leave-to { opacity: 0; transform: translateY(-10px); }
 
-/* انیمیشن کشویی سرچ موبایل */
 .search-slide-enter-active, .search-slide-leave-active { transition: all 0.3s ease-out; }
 .search-slide-enter-from, .search-slide-leave-to { opacity: 0; transform: translateY(-15px); }
 
-/* ترنزیشن نرم برای تغییر ارتفاع هدر */
+/* افکت ترنزیشن برای تغییر ارتفاع هدر */
 header {
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
