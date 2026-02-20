@@ -17,10 +17,10 @@ interface _GlobalComponents {
   'AuthLogin': typeof import("../../app/components/auth/Login.vue").default
   'AuthOtp': typeof import("../../app/components/auth/Otp.vue").default
   'AuthRegister': typeof import("../../app/components/auth/Register.vue").default
-  'CapitalForm': typeof import("../../app/components/capital/CapitalForm.vue").default
   'CapitalHero': typeof import("../../app/components/capital/CapitalHero.vue").default
   'CapitalStats': typeof import("../../app/components/capital/CapitalStats.vue").default
-  'CapitalSteps': typeof import("../../app/components/capital/CapitalSteps.vue").default
+  'CapitalProductCard': typeof import("../../app/components/capital/ProductCard.vue").default
+  'CapitalProductList': typeof import("../../app/components/capital/ProductList.vue").default
   'CommonEmptyState': typeof import("../../app/components/common/EmptyState.vue").default
   'HomeInfoBlock': typeof import("../../app/components/home/InfoBlock.vue").default
   'HomeServicesSection': typeof import("../../app/components/home/ServicesSection.vue").default
@@ -55,10 +55,10 @@ interface _GlobalComponents {
   'LazyAuthLogin': LazyComponent<typeof import("../../app/components/auth/Login.vue").default>
   'LazyAuthOtp': LazyComponent<typeof import("../../app/components/auth/Otp.vue").default>
   'LazyAuthRegister': LazyComponent<typeof import("../../app/components/auth/Register.vue").default>
-  'LazyCapitalForm': LazyComponent<typeof import("../../app/components/capital/CapitalForm.vue").default>
   'LazyCapitalHero': LazyComponent<typeof import("../../app/components/capital/CapitalHero.vue").default>
   'LazyCapitalStats': LazyComponent<typeof import("../../app/components/capital/CapitalStats.vue").default>
-  'LazyCapitalSteps': LazyComponent<typeof import("../../app/components/capital/CapitalSteps.vue").default>
+  'LazyCapitalProductCard': LazyComponent<typeof import("../../app/components/capital/ProductCard.vue").default>
+  'LazyCapitalProductList': LazyComponent<typeof import("../../app/components/capital/ProductList.vue").default>
   'LazyCommonEmptyState': LazyComponent<typeof import("../../app/components/common/EmptyState.vue").default>
   'LazyHomeInfoBlock': LazyComponent<typeof import("../../app/components/home/InfoBlock.vue").default>
   'LazyHomeServicesSection': LazyComponent<typeof import("../../app/components/home/ServicesSection.vue").default>

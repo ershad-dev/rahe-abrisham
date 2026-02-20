@@ -108,6 +108,17 @@ const products = [
       { label: 'نوع حمل بار', value: 'هوایی' },
       { label: 'نوع بیمه کالا', value: 'بیمه حوادث' },
     ]
+  },
+  {
+    deliveryTime: '20 روز',
+    pricePerShare: '180',
+    shareAmount: '80/15',
+    details: [
+      { label: 'نام کالا', value: 'پنل ' },
+      { label: 'نوع کالا', value: 'الکترونیک' },
+      { label: 'نوع حمل بار', value: 'هوایی' },
+      { label: 'نوع بیمه کالا', value: 'بیمه حوادث' },
+    ]
   }
 ]
 

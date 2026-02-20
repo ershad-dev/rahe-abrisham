@@ -159,11 +159,15 @@ const checkCode = async () => {
       // ۱. استخراج دیتای موقت
       const email = localStorage.getItem('pending_user_email') || 'user@test.com'
       const name = localStorage.getItem('pending_display_name') || 'کاربر عزیز'
+      const phone = localStorage.getItem('pending_user_phone') || ' شماره موبایل'
+
 
       // ۲. ثبت کلیدهای نهایی (هماهنگ با هدر و داشبورد)
       localStorage.setItem('isLoggedIn', 'true')
       localStorage.setItem('display_name', name)
       localStorage.setItem('user_email', email)
+      localStorage.setItem('user_phone', phone)
+
 
       // ۳. پاکسازی
       localStorage.removeItem('pending_user_email')

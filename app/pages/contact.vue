@@ -23,10 +23,29 @@
         </p>
       </div>
 
+      <div class="map-wrapper relative w-full md:w-[800px] h-[350px] mt-[100px] 
+                  md:ml-0 max-md:mx-auto [direction:ltr] 
+                  animate-[fadeInUp_0.8s_ease-out_0.4s_forwards] opacity-0 [animation-fill-mode:forwards]">
+            <div class="custom-marker absolute top-1/2 right-0 z-[10] md:z-[1] translate-x-[60%] -translate-y-1/2 pointer-events-none">
+              <img src="~/assets/images/neshan.png" alt="نشانگر اختصاصی" class="w-[170px] md:w-[280px] h-auto drop-shadow-[5px_5px_15px_rgba(0,0,0,0.15)] ">
+            </div>
+
+        <div class="google-map-container relative w-full h-full bg-[#ebebeb] rounded-[10px] shadow-[0_15px_35px_rgba(0,0,0,0.1)] border border-[#ddd] z-[2] overflow-hidden ">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1317.1965416823843!2d57.26590478084265!3d37.41595009213574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1771189658280!5m2!1sen!2s" 
+                width="600" 
+                height="450" 
+                style="border:0;" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+                class="w-full h-full"
+            ></iframe>
+        </div>
+      </div>
+
       <div class="form-container w-full mt-[55px] animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
         <h3 class="text-[28px] font-[900] m-0 mb-[12px] text-center">پیامی برای ما بفرستید</h3>
         <span class="form-note block text-[14px] text-[#555] mb-[30px] text-center">فیلدهای ستاره‌دار (*) الزامی هستند.</span>
-        
         <form @submit.prevent="handleSubmit">
           <div class="input-group flex flex-col flex-1">
             <textarea 
@@ -100,26 +119,6 @@
             </label>
           </div>
         </form>
-      </div>
-
-      <div class="map-wrapper relative w-full md:w-[800px] h-[350px] mt-[100px] 
-                  md:ml-0 max-md:mx-auto [direction:ltr] 
-                  animate-[fadeInUp_0.8s_ease-out_0.4s_forwards] opacity-0 [animation-fill-mode:forwards]">
-            <div class="custom-marker absolute top-1/2 right-0 z-[10] md:z-[1] translate-x-[60%] -translate-y-1/2 pointer-events-none">
-              <img src="~/assets/images/neshan.png" alt="نشانگر اختصاصی" class="w-[170px] md:w-[280px] h-auto drop-shadow-[5px_5px_15px_rgba(0,0,0,0.15)] ">
-            </div>
-
-        <div class="google-map-container relative w-full h-full bg-[#ebebeb] rounded-[10px] shadow-[0_15px_35px_rgba(0,0,0,0.1)] border border-[#ddd] z-[2] overflow-hidden ">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1317.1965416823843!2d57.26590478084265!3d37.41595009213574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1771189658280!5m2!1sen!2s" 
-                width="600" 
-                height="450" 
-                style="border:0;" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                class="w-full h-full"
-            ></iframe>
-        </div>
       </div>
     </div>
   </div>

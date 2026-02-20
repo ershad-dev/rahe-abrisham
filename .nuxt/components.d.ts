@@ -17,10 +17,10 @@ type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {},
 export const AuthLogin: typeof import("../app/components/auth/Login.vue").default
 export const AuthOtp: typeof import("../app/components/auth/Otp.vue").default
 export const AuthRegister: typeof import("../app/components/auth/Register.vue").default
-export const CapitalForm: typeof import("../app/components/capital/CapitalForm.vue").default
 export const CapitalHero: typeof import("../app/components/capital/CapitalHero.vue").default
 export const CapitalStats: typeof import("../app/components/capital/CapitalStats.vue").default
-export const CapitalSteps: typeof import("../app/components/capital/CapitalSteps.vue").default
+export const CapitalProductCard: typeof import("../app/components/capital/ProductCard.vue").default
+export const CapitalProductList: typeof import("../app/components/capital/ProductList.vue").default
 export const CommonEmptyState: typeof import("../app/components/common/EmptyState.vue").default
 export const HomeInfoBlock: typeof import("../app/components/home/InfoBlock.vue").default
 export const HomeServicesSection: typeof import("../app/components/home/ServicesSection.vue").default
@@ -55,10 +55,10 @@ export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components
 export const LazyAuthLogin: LazyComponent<typeof import("../app/components/auth/Login.vue").default>
 export const LazyAuthOtp: LazyComponent<typeof import("../app/components/auth/Otp.vue").default>
 export const LazyAuthRegister: LazyComponent<typeof import("../app/components/auth/Register.vue").default>
-export const LazyCapitalForm: LazyComponent<typeof import("../app/components/capital/CapitalForm.vue").default>
 export const LazyCapitalHero: LazyComponent<typeof import("../app/components/capital/CapitalHero.vue").default>
 export const LazyCapitalStats: LazyComponent<typeof import("../app/components/capital/CapitalStats.vue").default>
-export const LazyCapitalSteps: LazyComponent<typeof import("../app/components/capital/CapitalSteps.vue").default>
+export const LazyCapitalProductCard: LazyComponent<typeof import("../app/components/capital/ProductCard.vue").default>
+export const LazyCapitalProductList: LazyComponent<typeof import("../app/components/capital/ProductList.vue").default>
 export const LazyCommonEmptyState: LazyComponent<typeof import("../app/components/common/EmptyState.vue").default>
 export const LazyHomeInfoBlock: LazyComponent<typeof import("../app/components/home/InfoBlock.vue").default>
 export const LazyHomeServicesSection: LazyComponent<typeof import("../app/components/home/ServicesSection.vue").default>

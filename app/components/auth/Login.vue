@@ -103,8 +103,8 @@ const form = reactive({
 
 // اضافه کردن فیلد phone به دیتای کاربران آزمایشی
 const mockUsers = [
-  { email: 'erd@gmail.com', password: '1234', username: 'ارشاد', phone: '09157962833' },
-  { email: 'admin@gmail.com', password: '1111', username: 'علی', phone: '09123456789' }
+  { email: 'erd@gmail.com', password: '1234', username: 'ershad', phone: '09157962833' },
+  { email: 'ali@gmail.com', password: '1111', username: 'علی', phone: '09123456789' }
 ]
 
 onMounted(() => {
