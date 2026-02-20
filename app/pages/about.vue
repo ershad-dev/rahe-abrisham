@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white flex flex-col items-center overflow-x-hidden" dir="ltr">
+  <div class="min-h-screen bg-white flex flex-col items-center overflow-x-hidden mt-[45px]" dir="ltr">
     
     <div class="w-full max-w-[950px] flex flex-col items-center py-[60px] px-5 animate-[fadeIn_1s_ease-out] flex-grow">
       

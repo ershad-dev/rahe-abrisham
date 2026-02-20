@@ -14,6 +14,7 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 
+export const AuthForgetPassword: typeof import("../app/components/auth/ForgetPassword.vue").default
 export const AuthLogin: typeof import("../app/components/auth/Login.vue").default
 export const AuthOtp: typeof import("../app/components/auth/Otp.vue").default
 export const AuthRegister: typeof import("../app/components/auth/Register.vue").default
@@ -52,6 +53,7 @@ export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components").Html
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components").Body
 export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island").default
+export const LazyAuthForgetPassword: LazyComponent<typeof import("../app/components/auth/ForgetPassword.vue").default>
 export const LazyAuthLogin: LazyComponent<typeof import("../app/components/auth/Login.vue").default>
 export const LazyAuthOtp: LazyComponent<typeof import("../app/components/auth/Otp.vue").default>
 export const LazyAuthRegister: LazyComponent<typeof import("../app/components/auth/Register.vue").default>

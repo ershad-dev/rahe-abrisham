@@ -1,8 +1,8 @@
 <template>
-  <div class="page-wrapper min-h-screen bg-[#ebebeb] py-[50px] [direction:rtl] inteFont overflow-x-hidden">
+  <div class="page-wrapper min-h-screen bg-white py-[50px] [direction:rtl] inteFont overflow-x-hidden mt-[45px]">
     <div class="container max-w-[820px] mx-auto px-[14px]">
       
-      <div class="contact-card relative w-full bg-[linear-gradient(to_right,#D8D8D8_0%,#D8D8D8_70%,#ffffff_100%)] rounded-[7px] p-[45px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-400 ease-in-out animate-[fadeInUp_0.8s_ease-out_forwards] hover:-translate-y-[5px] hover:shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
+      <div class="contact-card relative w-full bg-[linear-gradient(to_right,#D8D8D8_0%,#D8D8D8_70%,#ffffff_100%)] rounded-[10px] p-[45px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-400 ease-in-out animate-[fadeInUp_0.8s_ease-out_forwards] hover:-translate-y-[5px] hover:shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
         <div class="contact-info absolute top-[35px] left-[40px] flex flex-col gap-[12px] [direction:ltr] text-left text-[15px] font-bold max-md:static max-md:items-center max-md:mb-[25px]">
           <div class="contact-row flex items-center gap-[10px] text-[#1a1a1a] transition-transform duration-300 ease-in hover:translate-x-[5px]">
             <span>09158875649</span>
@@ -13,7 +13,7 @@
             <img src="~/assets/images/sms-notification.png" alt="ایمیل" class="contact-icon w-[20px] h-[20px] object-contain">
           </div>
         </div>
-        <h2 class="m-0 text-[34px] font-[900] text-black [text-shadow:_0_0_4px_black]">ارتباط با ما</h2>
+        <h2 class="m-0 text-[34px] font-[900] text-black ">ارتباط با ما</h2>
 
 
         <p class="contact-text text-[15px] [line-height:2.2] mt-[65px] text-[#222] text-justify">

@@ -84,7 +84,7 @@
           :disabled="isLoading"
           class="w-full h-12 bg-[#0b0b54] text-white text-base font-bold rounded-lg hover:bg-[#15158a] transition-all active:scale-95 mt-2 shadow-md disabled:opacity-70 flex items-center justify-center overflow-hidden"
         >
-          <span v-if="!isLoading">تایید و ثبت نام</span>
+          <span v-if="!isLoading">  ثبت نام</span>
           <div v-else class="flex items-center gap-2">
             <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             <span class="text-[12px]">در حال پردازش...</span>

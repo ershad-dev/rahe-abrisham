@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#ebebeb] py-[30px] md:py-[50px] flex flex-col items-center [direction:rtl] overflow-x-hidden mt-[50px]">
+  <div class="min-h-screen bg-white py-[30px] md:py-[50px] flex flex-col items-center [direction:rtl] overflow-x-hidden mt-[50px]">
     
     <div class="w-full max-w-[1050px] px-4 mb-10">
       <div class="relative group">

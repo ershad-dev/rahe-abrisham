@@ -68,7 +68,9 @@
         </div>
 
         <div class="flex justify-between items-center text-[10px] mb-3 px-2 text-right">
-          <NuxtLink to="/forgot-password" class="text-[#0a0a5e] hover:underline font-bold">فراموشی رمز عبور</NuxtLink>
+            <NuxtLink to="/forgetPassword" class="text-[#0a0a5e] hover:underline font-bold">
+              فراموشی رمز عبور
+            </NuxtLink>
           <label class="flex items-center gap-1.5 cursor-pointer text-[#0a0a5e] font-bold">
             <span>مرا به خاطر بسپار</span>
             <input type="checkbox" v-model="form.rememberMe" class="hidden peer">
