@@ -1,17 +1,17 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 [direction:ltr] mt-[45px]">
+  <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 [direction:ltr] mt-[45px] font-sans">
     
-    <div class="w-full max-w-[700px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row overflow-visible min-h-[380px] text-right">
+    <div class="w-full max-w-[700px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row overflow-visible min-h-[420px] text-right ">
       
-      <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
-        <NuxtLink to="/register" class="flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 text-gray-400 opacity-60">
-          <img src="~/assets/images/sign.png" class="w-5 h-5" />
-          <span class="text-[12px] font-bold">ثبت نام</span>
+      <div class="flex md:hidden border-b border-gray-100">
+        <NuxtLink to="/register" class="flex-1 py-4 flex flex-col items-center justify-center text-gray-400 opacity-60 transition border-b-2 border-transparent">
+          <img src="~/assets/images/sign.png" class="w-5 h-5 mb-1" />
+          <span class="text-[11px] font-bold">ثبت نام</span>
         </NuxtLink>
-        <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
-          <img src="~/assets/images/login.png" class="w-5 h-5" />
-          <span class="text-[12px] font-bold">ورود</span>
-        </div>
+        <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center justify-center text-[#0b0b54] font-bold border-b-2 border-[#0b0b54] bg-gray-50/50">
+          <img src="~/assets/images/login.png" class="w-5 h-5 mb-1" />
+          <span class="text-[11px]">ورود </span>
+        </NuxtLink>
       </div>
 
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8 bg-gray-50/30">
@@ -26,176 +26,278 @@
         </NuxtLink>
       </div>
 
-      <div class="hidden md:block w-[150px] my-[-15px] mx-3 bg-gradient-to-b from-[#031535] to-[#004282] rounded-[20px] shadow-lg overflow-hidden z-10">
+      <div class="hidden md:block w-[120px] my-[-15px] mx-3 bg-gradient-to-b from-[#031535] to-[#004282] rounded-[20px] shadow-lg overflow-hidden z-10">
         <img src="~/assets/images/plane.png" class="w-full h-full object-cover" />
       </div>
 
-      <form @submit.prevent="handleReset" class="flex-1 flex flex-col justify-center py-6 px-6 md:px-12">
+      <div class="flex-1 flex flex-col justify-center py-8 px-6 md:px-12">
         
-        <div class="mb-5 text-right" :class="{ 'animate-shake': shakeField === 'password' }">
-          <label class="block text-[#0a0a5e] font-bold mb-2 mr-4 text-[13px]">رمز عبور جدید</label>
-          <div class="relative">
-            <input 
-              v-model="form.password" 
-              :type="showPassword ? 'text' : 'password'" 
-              dir="ltr" 
-              placeholder="••••••••"
-              class="w-full h-12 rounded-full border px-6 pl-12 text-[15px] outline-none transition-all text-left bg-[#ebebeb]/40 focus:bg-white"
-              :class="errors.password ? 'border-red-500' : 'border-gray-200 focus:border-[#0a0a5e]'"
-            />
-            <button type="button" @click="showPassword = !showPassword" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0a0a5e]">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path v-if="!showPassword" stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" />
-                <path v-if="!showPassword" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path v-else stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-              </svg>
-            </button>
+        <div v-if="currentStep === 1" class="animate-in">
+          <h2 class="text-xl font-bold text-[#0a0a5e] mb-2">فراموشی رمز</h2>
+          <p class="text-gray-400 text-[13px] mb-8">شماره موبایل خود را وارد کنید.</p>
+          
+          <div class="mb-8 text-right" :class="{ 'animate-shake': isShaking }">
+            <label class="block text-[#0a0a5e] font-bold mb-2 mr-4 text-[13px]">شماره موبایل</label>
+            <input v-model="form.mobile" type="text" dir="ltr" maxlength="11" @input="validateMobileInput" placeholder="09157962833"
+              class="w-full h-14 rounded-full border px-6 text-left bg-[#ebebeb]/40 focus:bg-white outline-none transition-all focus:border-[#0a0a5e] border-gray-200" />
+            <p v-if="errors.mobile" class="text-red-500 text-[11px] mt-2 mr-4 font-bold">{{ errors.mobile }}</p>
           </div>
-          <p v-if="errors.password" class="text-red-500 text-[11px] mt-1 mr-4 font-bold">{{ errors.password }}</p>
+
+          <button @click="verifyMobile" :disabled="isLoading" class="w-full h-14 bg-[#0b0b54] text-white font-bold rounded-xl shadow-md flex items-center justify-center active:scale-95 transition-all">
+            <span v-if="!isLoading">ارسال کد تایید</span>
+            <div v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+          </button>
         </div>
 
-        <div class="mb-6 text-right" :class="{ 'animate-shake': shakeField === 'confirm' }">
-          <label class="block text-[#0a0a5e] font-bold mb-2 mr-4 text-[13px]">تکرار رمز عبور جدید</label>
-          <div class="relative">
-            <input 
-              v-model="form.confirmPassword" 
-              :type="showConfirmPassword ? 'text' : 'password'" 
-              dir="ltr" 
-              placeholder="••••••••"
-              class="w-full h-12 rounded-full border px-6 pl-12 text-[15px] outline-none transition-all text-left bg-[#ebebeb]/40 focus:bg-white"
-              :class="errors.confirmPassword ? 'border-red-500' : 'border-gray-200 focus:border-[#0a0a5e]'"
-            />
-            <button type="button" @click="showConfirmPassword = !showConfirmPassword" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0a0a5e]">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path v-if="!showConfirmPassword" stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" />
-                <path v-if="!showConfirmPassword" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path v-else stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-              </svg>
-            </button>
+        <div v-if="currentStep === 2" class="animate-in text-center">
+          <h2 class="text-xl font-bold text-[#0a0a5e] mb-2">تایید هویت</h2>
+          <p class="text-gray-400 text-[13px] mb-8 font-bold">کد ۶ رقمی به شماره {{ form.mobile }} ارسال شد.</p>
+          
+          <div class="mb-6" :class="{ 'animate-shake': isShaking }">
+            <div class="flex justify-center gap-2" dir="ltr">
+              <input 
+                v-for="(n, index) in 6" :key="index" :id="'otp-' + index"
+                v-model="otpArray[index]" type="text" maxlength="1"
+                @input="handleOtpInput($event, index)"
+                @keydown.backspace="handleOtpBackspace($event, index)"
+                @paste="handlePaste"
+                :disabled="isExpired"
+                class="w-10 h-12 md:w-12 md:h-14 text-center text-xl font-bold rounded-xl border border-gray-200 bg-[#ebebeb]/40 focus:bg-white focus:border-[#0a0a5e] outline-none transition-all disabled:opacity-50"
+              />
+            </div>
+            <p v-if="errors.otp" class="text-red-500 text-[11px] mt-4 font-bold">{{ errors.otp }}</p>
+            <p v-if="isExpired" class="text-red-500 text-[11px] mt-2 font-bold">کد منقضی شده است.</p>
           </div>
-          <p v-if="errors.confirmPassword" class="text-red-500 text-[11px] mt-1 mr-4 font-bold">{{ errors.confirmPassword }}</p>
+
+          <div class="mb-6">
+            <div v-if="timer > 0" class="text-gray-400 text-[13px] font-bold">
+              مانده تا انقضا: {{ Math.floor(timer / 60) }}:{{ (timer % 60).toString().padStart(2, '0') }}
+            </div>
+            <button v-if="showResend" @click="resendCode" class="text-[#2b2bb5] text-[13px] font-bold hover:underline mt-2">ارسال مجدد کد تایید</button>
+          </div>
+
+          <button @click="verifyOTP" :disabled="isLoading || attempts <= 0 || isExpired" class="w-full h-14 bg-[#0b0b54] text-white font-bold rounded-xl shadow-md flex items-center justify-center transition-all disabled:bg-gray-300">
+            <span v-if="!isLoading">تایید کد</span>
+            <div v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+          </button>
+          <p class="text-gray-400 text-[11px] mt-4 px-2 font-bold">تعداد تلاش باقی‌مانده: {{ attempts }}</p>
         </div>
 
-        <div class="mb-8 space-y-2 px-4 text-[#0a0a5e] text-[13px] font-bold text-right">
-          <p>• حداقل 8 کاراکتر داشته باشد</p>
-          <p>• از اعداد در آن استفاده شود</p>
-          <p>• از حروف بزرگ و کوچک در آن استفاده شود</p>
-        </div>
+        <div v-if="currentStep === 3" class="animate-in">
+          <h2 class="text-xl font-bold text-[#0a0a5e] mb-6 text-right">رمز عبور جدید</h2>
+          
+          <div class="space-y-4 text-right">
+            <div class="relative" :class="{ 'animate-shake': passErrorShaking }">
+              <label class="block text-[#0a0a5e] font-bold mb-2 mr-4 text-[13px]">رمز عبور جدید</label>
+              <div class="relative">
+                <input v-model="form.password" :type="showPass ? 'text' : 'password'" dir="ltr" placeholder="••••••••"
+                  class="w-full h-12 rounded-full border px-6 pl-12 bg-[#ebebeb]/40 focus:bg-white outline-none focus:border-[#0a0a5e] text-left border-gray-200" />
+                <button @click="showPass = !showPass" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                   <svg v-if="!showPass" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                   <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+                </button>
+              </div>
+            </div>
 
-        <button 
-          type="submit" 
-          :disabled="isLoading"
-          class="w-full h-12 bg-[#0b0b54] text-white text-lg font-bold rounded-xl hover:bg-[#15158a] transition-all active:scale-95 shadow-md flex items-center justify-center"
-        >
-          <span v-if="!isLoading">ثبت</span>
-          <div v-else class="w-5 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-        </button>
-      </form>
+            <div class="relative" :class="{ 'animate-shake': passErrorShaking }">
+              <label class="block text-[#0a0a5e] font-bold mb-2 mr-4 text-[13px]">تکرار رمز عبور</label>
+              <div class="relative">
+                <input v-model="form.confirm" :type="showConfirm ? 'text' : 'password'" dir="ltr" placeholder="••••••••"
+                  class="w-full h-12 rounded-full border px-6 pl-12 bg-[#ebebeb]/40 focus:bg-white outline-none focus:border-[#0a0a5e] text-left border-gray-200" />
+                <button @click="showConfirm = !showConfirm" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                   <svg v-if="!showConfirm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                   <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+                </button>
+              </div>
+              <p v-if="errors.pass" class="text-red-500 text-[11px] mt-2 mr-4 font-bold">{{ errors.pass }}</p>
+            </div>
+          </div>
+
+          <div class="my-6 space-y-2 px-4 text-red-600 text-[15px] font-bold text-right opacity-80">
+            <p>• حداقل ۸ کاراکتر باشد</p>
+            <p>•از اعداد در آن استفاده شود</p>
+            <p>•از حروف بزرگ و کوچک در آن استفاده شود</p>
+          </div>
+
+          <button @click="resetPassword" :disabled="isLoading" class="w-full h-14 bg-[#0b0b54] text-white font-bold rounded-xl shadow-md active:scale-95 transition-all">
+            <span v-if="!isLoading">تغییر رمز عبور</span>
+            <div v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
+          </button>
+        </div>
+      </div>
     </div>
 
     <Transition name="fade">
-      <div v-if="showModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl p-8 max-w-[400px] w-full shadow-2xl flex flex-col items-center text-center animate-pop">
-          <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-10 h-10">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-[#0a0a5e] mb-2">عملیات موفقیت‌آمیز</h3>
-          <p class="text-gray-500 font-medium">رمز عبور شما با موفقیت تغییر یافت.</p>
-          <p class="text-gray-400 text-sm mt-4">در حال انتقال به صفحه ورود...</p>
-          
-          <div class="w-full h-1 bg-gray-100 mt-6 rounded-full overflow-hidden">
-            <div class="h-full bg-green-500 animate-progress"></div>
-          </div>
+      <div v-if="showSuccess" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 max-w-[380px] w-full shadow-2xl text-center animate-pop">
+          <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">✅</div>
+          <h3 class="text-2xl font-bold text-[#0a0a5e] mb-2 ">تغییر یافت!</h3>
+          <p class="text-gray-500 font-medium ">رمز شما با موفقیت بروزرسانی شد.</p>
         </div>
       </div>
     </Transition>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref, reactive, onUnmounted, nextTick } from 'vue'
 
+// مدیریت وضعیت‌ها
+const currentStep = ref(1)
 const isLoading = ref(false)
-const showPassword = ref(false)
-const showConfirmPassword = ref(false)
-const showModal = ref(false)
-const shakeField = ref('')
+const isShaking = ref(false)
+const passErrorShaking = ref(false)
+const showSuccess = ref(false)
+const showPass = ref(false)
+const showConfirm = ref(false)
+const showResend = ref(false)
+const isExpired = ref(false)
+const targetEmail = ref('') // برای شناسایی کاربر پیدا شده
+const attempts = ref(3)
+const timer = ref(120)
+let timerInterval: any = null
 
-const form = reactive({ password: '', confirmPassword: '' })
-const errors = reactive({ password: '', confirmPassword: '' })
+const otpArray = ref(['', '', '', '', '', ''])
+const form = reactive({ mobile: '', password: '', confirm: '' })
+const errors = reactive({ mobile: '', otp: '', pass: '' })
 
-const triggerShake = (field: string) => {
-  shakeField.value = field
-  setTimeout(() => { shakeField.value = '' }, 500)
+// دیتابیس کاربران مرجع (باید با لاگین یکی باشد)
+const mockUsers = [
+  { email: 'erd@gmail.com', password: '1234', username: 'ershad', phone: '09157962833' },
+  { email: 'ali@gmail.com', password: '1111', username: 'علی', phone: '09123456789' }
+]
+
+// منطق تایمر
+const startTimer = () => {
+  timer.value = 120
+  isExpired.value = false
+  showResend.value = false
+  if (timerInterval) clearInterval(timerInterval)
+  
+  timerInterval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--
+      if (timer.value <= 60) showResend.value = true
+    } else {
+      clearInterval(timerInterval)
+      isExpired.value = true
+    }
+  }, 1000)
 }
 
-const handleReset = async () => {
-  errors.password = ''
-  errors.confirmPassword = ''
-
-  if (!form.password) {
-    errors.password = 'لطفاً رمز عبور را وارد کنید'
-    triggerShake('password'); return
+// مرحله ۱: تایید شماره و یافتن کاربر تستی
+const verifyMobile = async () => {
+  errors.mobile = ''
+  if (form.mobile.length < 11) { errors.mobile = 'شماره موبایل ناقص است'; triggerShake(); return }
+  
+  isLoading.value = true
+  await new Promise(r => setTimeout(r, 800))
+  
+  // منطق جدید: جستجوی کاربر در لیست تستی
+  const user = mockUsers.find(u => u.phone === form.mobile)
+  if (user) {
+    targetEmail.value = user.email
+    isLoading.value = false
+    currentStep.value = 2
+    startTimer()
+  } else {
+    isLoading.value = false
+    errors.mobile = 'کاربری با این شماره در دیتابیس تستی یافت نشد';
+    triggerShake()
   }
+}
 
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@])[A-Za-z\d@]{8,}$/
-  if (!passwordRegex.test(form.password)) {
-    errors.password = 'رمز باید شامل حروف بزرگ، کوچک، عدد و علامت @ باشد'
-    triggerShake('password'); return
+// مرحله ۲: منطق OTP و ورودی‌ها
+const handleOtpInput = (e: any, index: number) => {
+  const val = e.target.value.replace(/\D/g, '')
+  otpArray.value[index] = val
+  if (val && index < 5) nextTick(() => document.getElementById(`otp-${index + 1}`)?.focus())
+  if (otpArray.value.every(v => v !== '')) verifyOTP()
+}
+
+const handleOtpBackspace = (e: any, index: number) => {
+  if (!otpArray.value[index] && index > 0) document.getElementById(`otp-${index - 1}`)?.focus()
+}
+
+const handlePaste = (e: ClipboardEvent) => {
+  const pasteData = e.clipboardData?.getData('text').slice(0, 6).split('')
+  if (pasteData) {
+    pasteData.forEach((char, i) => { if (/\d/.test(char)) otpArray.value[i] = char })
+    nextTick(() => verifyOTP())
   }
+}
 
-  if (form.password !== form.confirmPassword) {
-    errors.confirmPassword = 'رمزها با هم مطابقت ندارند'
-    triggerShake('confirm'); return
+const resendCode = () => {
+  otpArray.value = ['', '', '', '', '', '']
+  errors.otp = ''; attempts.value = 3; startTimer()
+}
+
+const verifyOTP = async () => {
+  if (isLoading.value || attempts.value <= 0 || isExpired.value) return
+  isLoading.value = true
+  await new Promise(r => setTimeout(r, 1000))
+  
+  if (otpArray.value.join('') === '123456') { // کد تستی ثابت
+    isLoading.value = false
+    currentStep.value = 3
+  } else {
+    attempts.value--
+    errors.otp = `کد نادرست است (${attempts.value} تلاش باقی‌مانده)`
+    isLoading.value = false
+    triggerShake()
+    otpArray.value = ['', '', '', '', '', '']
+    document.getElementById('otp-0')?.focus()
+  }
+}
+
+// مرحله ۳: تغییر رمز و ذخیره در LocalStorage برای اتصال به لاگین
+const resetPassword = async () => {
+  errors.pass = ''
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+  
+  if (!regex.test(form.password)) {
+    errors.pass = 'رمز عبور باید شامل حروف بزرگ، کوچک، عدد و علامت باشد';
+    triggerShake('pass'); return
+  }
+  if (form.password !== form.confirm) {
+    errors.pass = 'رمز عبور و تکرار آن مطابقت ندارند';
+    triggerShake('pass'); return
   }
 
   isLoading.value = true
-  
-  // شبیه‌سازی API
-  await new Promise(resolve => setTimeout(resolve, 1500))
-  
-  isLoading.value = false
-  showModal.value = true
-  
-  // هدایت بعد از ۳ ثانیه
-  setTimeout(() => {
-    navigateTo('/login')
-  }, 3000)
+  await new Promise(r => setTimeout(r, 1500))
+
+  // منطق کلیدی: ذخیره رمز جدید با کلید ایمیل کاربر در LocalStorage
+  const storageData = JSON.parse(localStorage.getItem('mock_passwords') || '{}')
+  storageData[targetEmail.value] = form.password
+  localStorage.setItem('mock_passwords', JSON.stringify(storageData))
+
+  showSuccess.value = true
+  setTimeout(() => navigateTo('/login'), 3000)
 }
+
+// ابزارهای کمکی
+const triggerShake = (type: 'general' | 'pass' = 'general') => {
+  if (type === 'pass') {
+    passErrorShaking.value = true; setTimeout(() => passErrorShaking.value = false, 500)
+  } else {
+    isShaking.value = true; setTimeout(() => isShaking.value = false, 500)
+  }
+}
+
+const validateMobileInput = (e: any) => { form.mobile = e.target.value.replace(/\D/g, '') }
+
+onUnmounted(() => { if (timerInterval) clearInterval(timerInterval) })
 </script>
 
 <style scoped>
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-.animate-shake {
-  animation: shake 0.2s ease-in-out 0s 2;
-}
-
-@keyframes pop {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-.animate-pop {
-  animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes progress {
-  0% { width: 100%; }
-  100% { width: 0%; }
-}
-.animate-progress {
-  animation: progress 3s linear forwards;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
+.animate-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
+@keyframes pop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.animate-pop { animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

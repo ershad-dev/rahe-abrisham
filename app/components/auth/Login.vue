@@ -103,7 +103,6 @@ const form = reactive({
   rememberMe: false
 })
 
-// اضافه کردن فیلد phone به دیتای کاربران آزمایشی
 const mockUsers = [
   { email: 'erd@gmail.com', password: '1234', username: 'ershad', phone: '09157962833' },
   { email: 'ali@gmail.com', password: '1111', username: 'علی', phone: '09123456789' }
@@ -129,18 +128,23 @@ const handleLogin = async () => {
   }
 
   isLoading.value = true
-
-  // شبیه‌سازی انتظار شبکه
   await new Promise(resolve => setTimeout(resolve, 1000))
 
-  const foundUser = mockUsers.find(u => u.email === form.email && u.password === form.password)
+  // --- منطق جدید برای هماهنگی با فراموشی رمز ---
+  const changedPasswords = JSON.parse(localStorage.getItem('mock_passwords') || '{}')
   
+  const foundUser = mockUsers.find(u => {
+    // اگر رمزی در localStorage تغییر کرده بود، آن را ملاک قرار بده، در غیر این صورت رمز پیش‌فرض
+    const effectivePassword = changedPasswords[u.email] || u.password
+    return u.email === form.email && effectivePassword === form.password
+  })
+  // ------------------------------------------
+
   if (foundUser) {
-    // ذخیره تمامی کلیدهای مورد نیاز برای داشبورد
     localStorage.setItem('isLoggedIn', 'true')
     localStorage.setItem('display_name', foundUser.username)
     localStorage.setItem('user_email', foundUser.email)
-    localStorage.setItem('user_phone', foundUser.phone) // ذخیره شماره موبایل
+    localStorage.setItem('user_phone', foundUser.phone)
     
     if (form.rememberMe) {
       localStorage.setItem('userEmail', form.email)
@@ -153,7 +157,6 @@ const handleLogin = async () => {
     }
 
     isLoading.value = false
-    // استفاده از window.location برای اطمینان از ریفرش شدن استیت‌ها در داشبورد
     window.location.href = '/dashboard'
   } else {
     isLoading.value = false
@@ -173,13 +176,11 @@ const triggerShake = () => {
   from { opacity: 0; transform: translateY(10px); } 
   to { opacity: 1; transform: translateY(0); } 
 }
-
 @keyframes shake { 
   10%, 90% { transform: translate3d(-1px, 0, 0); } 
   20%, 80% { transform: translate3d(2px, 0, 0); } 
   30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 
 }
-
 .shake { 
   animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; 
 }
