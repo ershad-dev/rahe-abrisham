@@ -15,10 +15,11 @@
         </div>
 
         <div class="w-full md:w-[55%] p-6 md:p-12 text-right flex flex-col justify-center">
-            <h3 class="text-[22px] md:text-[28px] font-black text-black mb-4 md:mb-6 tracking-tight text-center md:text-right">
-                 چرا راه ابریشم؟
-            </h3>
-          
+          <h3 class="text-[22px] md:text-[28px] text-black mb-4 md:mb-6 tracking-tight text-center md:text-right" 
+              style="text-shadow: 1px 0 0 black, -1px 0 0 black;">
+              چرا راه ابریشم؟
+          </h3>
+
           <p class="text-[14px] md:text-[16px] text-black leading-[1.7] md:leading-[1.8] font-medium text-center md:text-right">
             شرکت بازرگانی راه ابریشم با بهره بردن از مدیران مجرب و کار آزموده و با هدف تسهیل در امور پیچیده واردات، صادرات و ترخیص کالا در کنار بازرگانان و تجار محترم است. با راه ابریشم مطمئن تجارت کنید.
           </p>

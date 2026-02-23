@@ -10,14 +10,16 @@
           </div>
         </div>
 
-        <div class="flex-1 text-center md:text-right md:pr-[40px] mb-[30px] md:mb-0">
-          <h1 class="text-[36px] md:text-[45px] text-black text-center leading-[1.2] font-[100]">
-            همراه شما <br>
-            هستیم در <br>
-            دنیای تجارت <br>
-            بین الملل
-          </h1>
-        </div>
+          <div class="flex-1 text-center md:text-right md:pl-[70px] mb-[30px]     md:mb-0">
+            <h1 
+              class="text-[36px] md:text-[45px] text-black text-center md:text-right leading-[1.2] font-black"
+              style="text-shadow: 0.8px 0 0 black, -0.8px 0 0 black;" >
+              همراه شما <br>
+              هستیم در <br>
+              دنیای تجارت <br>
+              بین الملل
+            </h1>
+          </div>
       </div>
 
       <div class="w-full px-2 md:px-[40px] text-center mb-[70px]">

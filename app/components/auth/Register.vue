@@ -33,30 +33,31 @@
       <form @submit.prevent="submit" class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2">
         
         <div v-for="field in singleFields" :key="field" class="mb-3">
-          <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px] text-right">
+          <label class="block  text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px] text-right" style="text-shadow: 0.5px 0 0 #0a0a5e, -0.5px 0 0 #0a0a5e;">
             {{ fieldLabels[field] }}
           </label>
-          <input 
-            v-model="form[field]" 
-            :type="field === 'phone' ? 'tel' : (field === 'email' ? 'email' : 'text')"
-            class="w-full h-11 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-white placeholder:text-gray-300"
-            :dir="(field === 'username') ? 'rtl' : 'ltr'"
-            :placeholder="field === 'phone' ? '09123456789' : ''"
-            @input="field === 'phone' ? handlePhoneInput($event) : null"
-          />
+              <input 
+                v-model="form[field]" 
+                :type="field === 'phone' ? 'tel' : (field === 'email' ? 'email' : 'text')"
+                class="w-full h-11 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-transparent placeholder:text-gray-300 dir-ltr"
+                :dir="(field === 'username') ? 'rtl' : 'ltr'"
+                :placeholder="fieldPlaceholders[field]"
+                @input="field === 'phone' ? handlePhoneInput($event) : null"
+              />
         </div>
 
         <div class="flex flex-col md:flex-row gap-3 mb-3">
           <div v-for="field in passwordFields" :key="field" class="flex-1">
-            <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px] text-right">
+            <label class="block text-[#0a0a5e] font-bold mb-1 mr-3 text-[13px] text-right" style="text-shadow: 0.5px 0 0 #0a0a5e, -0.5px 0 0 #0a0a5e;">
               {{ fieldLabels[field] }}
             </label>
             <div class="relative">
               <input 
                 v-model="form[field]" 
                 :type="isPasswordVisible(field) ? 'text' : 'password'"
-                class="w-full h-11 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-white pl-12"
-                dir="rtl"
+                class="w-full h-11 rounded-full border border-gray-200 px-4 text-[14px] outline-none focus:border-[#0a0a5e] transition-all bg-[#ebebeb]/40 focus:bg-transparent pl-12 placeholder:text-gray-300 "
+                dir="ltr"
+                :placeholder="fieldPlaceholders[field]"
               />
               <button 
                 type="button"
@@ -64,11 +65,11 @@
                 class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0a0a5e] transition-colors "
               >
                 <svg v-if="isPasswordVisible(field)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-                <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.644C3.413 8.242 7.291 4.5 12 4.5c4.686 0 8.573 3.742 9.964 7.178.07.242.07.485 0 .727C20.587 15.758 16.699 19.5 12 19.5c-4.687 0-8.574-3.742-9.963-7.178z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
                 </svg>
               </button>
             </div>
@@ -99,7 +100,6 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'nuxt/app'
 
-// ۱. تعریف دقیق ساختار داده برای جلوگیری از خطای Index Type
 interface RegisterForm {
   username: string;
   email: string;
@@ -110,7 +110,6 @@ interface RegisterForm {
 
 const router = useRouter()
 
-// ۲. استفاده از اینترفیس در reactive
 const form = reactive<RegisterForm>({
   username: '',
   email: '',
@@ -125,7 +124,6 @@ const isLoading = ref(false)
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
-// ۳. تعریف آرایه‌ها با استفاده از keyof برای امنیت تایپ در v-for
 const singleFields: (keyof RegisterForm)[] = ['username', 'email', 'phone']
 const passwordFields: (keyof RegisterForm)[] = ['password', 'confirmPassword']
 
@@ -137,7 +135,15 @@ const fieldLabels: Record<keyof RegisterForm, string> = {
   confirmPassword: 'تکرار رمز عبور'
 }
 
-// ۴. اصلاح توابع با تایپ دقیق ورودی
+// اضافه شدن Placeholder ها
+const fieldPlaceholders: Record<keyof RegisterForm, string> = {
+  username: 'نام و نام خانوادگی',
+  email: 'example@mail.com',
+  phone: '09123456789',
+  password: '••••••••',
+  confirmPassword: '••••••••'
+}
+
 const isPasswordVisible = (field: keyof RegisterForm) => {
   return field === 'password' ? showPassword.value : showConfirmPassword.value
 }
@@ -163,7 +169,6 @@ const triggerError = (msg: string) => {
 const submit = async () => {
   error.value = ''
   
-  // منطق چک کردن پر بودن تمام فیلدها (با Trim برای امنیت بیشتر)
   const values = Object.values(form);
   if (values.some(value => !value.trim())) {
     triggerError('لطفاً تمامی فیلدها را پر کنید');
@@ -182,10 +187,8 @@ const submit = async () => {
 
   isLoading.value = true
   try {
-    // شبیه‌سازی API
     await new Promise(resolve => setTimeout(resolve, 1200))
     
-    // ذخیره مقادیر در localStorage (منطق قبلی شما)
     localStorage.setItem('pending_user_phone', form.phone)
     localStorage.setItem('pending_display_name', form.username) 
     localStorage.setItem('pending_user_email', form.email) 

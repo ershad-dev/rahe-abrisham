@@ -1,7 +1,9 @@
 <template>
   <section class="w-full bg-white py-12 flex justify-center dir-rtl font-sans">
-    <div class="w-full max-w-[850px] px-4">
-      <h2 class="md:text-[25px] font-black text-center mb-10 text-black">خدمات شرکت بازرگانی راه ابریشم</h2>
+    <div class="w-full max-w-[900px] px-4">
+<h2 class="text-[20px] md:text-[25px] font-black text-center mb-10 text-black" style="text-shadow: 1px 0 0 black, -1px 0 0 black;">
+    خدمات شرکت بازرگانی راه ابریشم
+</h2>
 
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
         
@@ -35,7 +37,6 @@
 
       </div>
 
-      <div class="w-full h-[1.5px] bg-[#333] opacity-80 mb-8"></div>
 
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         

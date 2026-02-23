@@ -2,7 +2,7 @@
   <div class="page-wrapper min-h-screen bg-white py-[50px] [direction:rtl] inteFont overflow-x-hidden mt-[45px]">
     <div class="container max-w-[820px] mx-auto px-[14px]">
       
-      <div class="contact-card relative w-full bg-[linear-gradient(to_right,#D8D8D8_0%,#D8D8D8_70%,#ffffff_100%)] rounded-[10px] p-[45px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-400 ease-in-out animate-[fadeInUp_0.8s_ease-out_forwards] hover:-translate-y-[5px] hover:shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
+      <div class="contact-card relative w-full bg-[linear-gradient(to_right,#D8D8D8_0%,#D8D8D8_70%,#ffffff_100%)] rounded-[10px] p-[45px] transition-all duration-400 ease-in-out animate-[fadeInUp_0.8s_ease-out_forwards] hover:-translate-y-[5px] border-[3px]">
         <div class="contact-info absolute top-[35px] left-[40px] flex flex-col gap-[12px] [direction:ltr] text-left text-[15px] font-bold max-md:static max-md:items-center max-md:mb-[25px]">
           <div class="contact-row flex items-center gap-[10px] text-[#1a1a1a] transition-transform duration-300 ease-in hover:translate-x-[5px]">
             <span>09158875649</span>
@@ -13,7 +13,7 @@
             <img src="~/assets/images/sms-notification.png" alt="ایمیل" class="contact-icon w-[20px] h-[20px] object-contain">
           </div>
         </div>
-        <h2 class="m-0 text-[34px] font-[900] text-black ">ارتباط با ما</h2>
+        <h2 class="m-0 text-[34px] font-[900] text-black " style="text-shadow: 0.8px 0 0 black, -0.8px 0 0 black;">ارتباط با ما</h2>
 
 
         <p class="contact-text text-[15px] [line-height:2.2] mt-[65px] text-[#222] text-justify">
@@ -31,15 +31,7 @@
             </div>
 
         <div class="google-map-container relative w-full h-full bg-[#ebebeb] rounded-[10px] shadow-[0_15px_35px_rgba(0,0,0,0.1)] border border-[#ddd] z-[2] overflow-hidden ">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1317.1965416823843!2d57.26590478084265!3d37.41595009213574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1771189658280!5m2!1sen!2s" 
-                width="600" 
-                height="450" 
-                style="border:0;" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                class="w-full h-full"
-            ></iframe>
+<iframe title="map-iframe" src="https://neshan.org/maps/iframe/places/_bLZkb0dPxXQ#c37.416-57.265-18z-0p/37.41552938226799/57.26461005963546" width="600" height="450" allowFullScreen loading="lazy" ></iframe>
         </div>
       </div>
 
