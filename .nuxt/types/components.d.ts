@@ -30,6 +30,9 @@ interface _GlobalComponents {
   'LayoutFooter': typeof import("../../app/components/layout/Footer.vue").default
   'LayoutHeaderImg': typeof import("../../app/components/layout/HeaderImg.vue").default
   'LayoutNavbar': typeof import("../../app/components/layout/Navbar.vue").default
+  'ProfileAccountInfo': typeof import("../../app/components/profile/AccountInfo.vue").default
+  'ProfilePasswordChange': typeof import("../../app/components/profile/PasswordChange.vue").default
+  'ProfileSidebar': typeof import("../../app/components/profile/Sidebar.vue").default
   'NuxtWelcome': typeof import("../../node_modules/nuxt/dist/app/components/welcome.vue").default
   'NuxtLayout': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-layout").default
   'NuxtErrorBoundary': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-error-boundary.vue").default
@@ -69,6 +72,9 @@ interface _GlobalComponents {
   'LazyLayoutFooter': LazyComponent<typeof import("../../app/components/layout/Footer.vue").default>
   'LazyLayoutHeaderImg': LazyComponent<typeof import("../../app/components/layout/HeaderImg.vue").default>
   'LazyLayoutNavbar': LazyComponent<typeof import("../../app/components/layout/Navbar.vue").default>
+  'LazyProfileAccountInfo': LazyComponent<typeof import("../../app/components/profile/AccountInfo.vue").default>
+  'LazyProfilePasswordChange': LazyComponent<typeof import("../../app/components/profile/PasswordChange.vue").default>
+  'LazyProfileSidebar': LazyComponent<typeof import("../../app/components/profile/Sidebar.vue").default>
   'LazyNuxtWelcome': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/welcome.vue").default>
   'LazyNuxtLayout': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/nuxt-layout").default>
   'LazyNuxtErrorBoundary': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/nuxt-error-boundary.vue").default>

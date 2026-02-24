@@ -8,7 +8,7 @@
           <img src="~/assets/images/sign.png" class="w-5 h-5 mb-1" />
           <span class="text-[11px] font-bold">ثبت نام</span>
         </NuxtLink>
-        <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center justify-center text-[#0b0b54] font-bold border-b-2 border-[#0b0b54] bg-gray-50/50">
+        <NuxtLink to="login" class="flex-1 py-4 flex flex-col items-center justify-center text-[#0b0b54] font-bold border-b-2 border-[#0b0b54] bg-gray-50/50">
           <img src="~/assets/images/login.png" class="w-5 h-5 mb-1" />
           <span class="text-[11px]">ورود </span>
         </NuxtLink>

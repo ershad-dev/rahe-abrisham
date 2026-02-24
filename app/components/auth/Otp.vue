@@ -7,7 +7,7 @@
           <img src="~/assets/images/sign.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">تایید کد</span>
         </div>
-        <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center gap-1 text-gray-400 opacity-60">
+        <NuxtLink to="/auth/login" class="flex-1 py-4 flex flex-col items-center gap-1 text-gray-400 opacity-60">
           <img src="~/assets/images/login.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">برگشت</span>
         </NuxtLink>
