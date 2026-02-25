@@ -14,6 +14,12 @@
             <ProfileAccountInfo v-if="activeTab === 'account'" />
             
             <ProfilePasswordChange v-else-if="activeTab === 'password'" />
+
+            <ProfileOrders v-else-if="activeTab === 'orders'" />
+
+            <ProfileTickets v-else-if="activeTab === 'tickets'" />
+
+
             
             <div v-else class="bg-white p-16 rounded-[20px] shadow-sm border border-gray-50 text-center">
               <div class="text-gray-300 mb-4">

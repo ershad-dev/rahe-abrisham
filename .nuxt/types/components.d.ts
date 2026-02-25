@@ -31,8 +31,10 @@ interface _GlobalComponents {
   'LayoutHeaderImg': typeof import("../../app/components/layout/HeaderImg.vue").default
   'LayoutNavbar': typeof import("../../app/components/layout/Navbar.vue").default
   'ProfileAccountInfo': typeof import("../../app/components/profile/AccountInfo.vue").default
+  'ProfileOrders': typeof import("../../app/components/profile/Orders.vue").default
   'ProfilePasswordChange': typeof import("../../app/components/profile/PasswordChange.vue").default
   'ProfileSidebar': typeof import("../../app/components/profile/Sidebar.vue").default
+  'ProfileTickets': typeof import("../../app/components/profile/Tickets.vue").default
   'NuxtWelcome': typeof import("../../node_modules/nuxt/dist/app/components/welcome.vue").default
   'NuxtLayout': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-layout").default
   'NuxtErrorBoundary': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-error-boundary.vue").default
@@ -73,8 +75,10 @@ interface _GlobalComponents {
   'LazyLayoutHeaderImg': LazyComponent<typeof import("../../app/components/layout/HeaderImg.vue").default>
   'LazyLayoutNavbar': LazyComponent<typeof import("../../app/components/layout/Navbar.vue").default>
   'LazyProfileAccountInfo': LazyComponent<typeof import("../../app/components/profile/AccountInfo.vue").default>
+  'LazyProfileOrders': LazyComponent<typeof import("../../app/components/profile/Orders.vue").default>
   'LazyProfilePasswordChange': LazyComponent<typeof import("../../app/components/profile/PasswordChange.vue").default>
   'LazyProfileSidebar': LazyComponent<typeof import("../../app/components/profile/Sidebar.vue").default>
+  'LazyProfileTickets': LazyComponent<typeof import("../../app/components/profile/Tickets.vue").default>
   'LazyNuxtWelcome': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/welcome.vue").default>
   'LazyNuxtLayout': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/nuxt-layout").default>
   'LazyNuxtErrorBoundary': LazyComponent<typeof import("../../node_modules/nuxt/dist/app/components/nuxt-error-boundary.vue").default>
