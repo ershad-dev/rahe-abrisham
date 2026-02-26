@@ -15,12 +15,22 @@
             
             <ProfilePasswordChange v-else-if="activeTab === 'password'" />
 
-            <ProfileOrders v-else-if="activeTab === 'orders'" />
+            <div v-else-if="activeTab === 'orders'">
+              <transition name="fade-slide" mode="out-in">
+                <ProfileOrders 
+                  v-if="!selectedOrderId" 
+                  @track-order="handleTrackOrder" 
+                />
+                <ProfileOrderStatus 
+                  v-else 
+                  :orderId="selectedOrderId" 
+                  @back="selectedOrderId = null" 
+                />
+              </transition>
+            </div>
 
             <ProfileTickets v-else-if="activeTab === 'tickets'" />
 
-
-            
             <div v-else class="bg-white p-16 rounded-[20px] shadow-sm border border-gray-50 text-center">
               <div class="text-gray-300 mb-4">
                 <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,7 +44,7 @@
         </div>
 
         <div class="lg:col-span-4 xl:col-span-3 order-1 lg:order-2 w-full">
-          <ProfileSidebar v-model:activeTab="activeTab" />
+          <ProfileSidebar v-model:activeTab="activeTab" @update:activeTab="selectedOrderId = null" />
         </div>
 
       </div>
@@ -43,12 +53,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+// Import کردن کامپوننت‌های مربوطه (فرض بر این است که ریجیستر شده‌اند یا اتوماتیک لود می‌شوند)
 
-// وضعیت تب فعال (به صورت پیش‌فرض روی اطلاعات حساب)
 const activeTab = ref('account');
+const selectedOrderId = ref(null); // ذخیره ID سفارش برای پیگیری
 
-// تابعی برای برگرداندن نام فارسی تب (فقط برای نمایش در بخش در حال توسعه)
+// وقتی کاربر تب را عوض می‌کند، انتخاب سفارش قبلی را ریست کن
+watch(activeTab, () => {
+  selectedOrderId.value = null;
+});
+
+const handleTrackOrder = (id) => {
+  selectedOrderId.value = id;
+};
+
 const activeTabName = computed(() => {
   const titles = {
     'orders': 'پیگیری سفارش‌ها',
@@ -58,21 +77,3 @@ const activeTabName = computed(() => {
   return titles[activeTab.value] || activeTab.value;
 });
 </script>
-
-<style scoped>
-/* انیمیشن جابه‌جایی نرم بین صفحات پروفایل */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s ease;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-</style>

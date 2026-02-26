@@ -14,6 +14,8 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 interface _GlobalComponents {
+  'AdminHome': typeof import("../../app/components/admin/AdminHome.vue").default
+  'AdminLogin': typeof import("../../app/components/admin/AdminLogin.vue").default
   'AuthForgetPassword': typeof import("../../app/components/auth/ForgetPassword.vue").default
   'AuthLogin': typeof import("../../app/components/auth/Login.vue").default
   'AuthOtp': typeof import("../../app/components/auth/Otp.vue").default
@@ -31,6 +33,7 @@ interface _GlobalComponents {
   'LayoutHeaderImg': typeof import("../../app/components/layout/HeaderImg.vue").default
   'LayoutNavbar': typeof import("../../app/components/layout/Navbar.vue").default
   'ProfileAccountInfo': typeof import("../../app/components/profile/AccountInfo.vue").default
+  'ProfileOrderStatus': typeof import("../../app/components/profile/OrderStatus.vue").default
   'ProfileOrders': typeof import("../../app/components/profile/Orders.vue").default
   'ProfilePasswordChange': typeof import("../../app/components/profile/PasswordChange.vue").default
   'ProfileSidebar': typeof import("../../app/components/profile/Sidebar.vue").default
@@ -58,6 +61,8 @@ interface _GlobalComponents {
   'Html': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Html
   'Body': typeof import("../../node_modules/nuxt/dist/head/runtime/components").Body
   'NuxtIsland': typeof import("../../node_modules/nuxt/dist/app/components/nuxt-island").default
+  'LazyAdminHome': LazyComponent<typeof import("../../app/components/admin/AdminHome.vue").default>
+  'LazyAdminLogin': LazyComponent<typeof import("../../app/components/admin/AdminLogin.vue").default>
   'LazyAuthForgetPassword': LazyComponent<typeof import("../../app/components/auth/ForgetPassword.vue").default>
   'LazyAuthLogin': LazyComponent<typeof import("../../app/components/auth/Login.vue").default>
   'LazyAuthOtp': LazyComponent<typeof import("../../app/components/auth/Otp.vue").default>
@@ -75,6 +80,7 @@ interface _GlobalComponents {
   'LazyLayoutHeaderImg': LazyComponent<typeof import("../../app/components/layout/HeaderImg.vue").default>
   'LazyLayoutNavbar': LazyComponent<typeof import("../../app/components/layout/Navbar.vue").default>
   'LazyProfileAccountInfo': LazyComponent<typeof import("../../app/components/profile/AccountInfo.vue").default>
+  'LazyProfileOrderStatus': LazyComponent<typeof import("../../app/components/profile/OrderStatus.vue").default>
   'LazyProfileOrders': LazyComponent<typeof import("../../app/components/profile/Orders.vue").default>
   'LazyProfilePasswordChange': LazyComponent<typeof import("../../app/components/profile/PasswordChange.vue").default>
   'LazyProfileSidebar': LazyComponent<typeof import("../../app/components/profile/Sidebar.vue").default>

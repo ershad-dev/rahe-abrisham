@@ -14,6 +14,8 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 
+export const AdminHome: typeof import("../app/components/admin/AdminHome.vue").default
+export const AdminLogin: typeof import("../app/components/admin/AdminLogin.vue").default
 export const AuthForgetPassword: typeof import("../app/components/auth/ForgetPassword.vue").default
 export const AuthLogin: typeof import("../app/components/auth/Login.vue").default
 export const AuthOtp: typeof import("../app/components/auth/Otp.vue").default
@@ -31,6 +33,7 @@ export const LayoutFooter: typeof import("../app/components/layout/Footer.vue").
 export const LayoutHeaderImg: typeof import("../app/components/layout/HeaderImg.vue").default
 export const LayoutNavbar: typeof import("../app/components/layout/Navbar.vue").default
 export const ProfileAccountInfo: typeof import("../app/components/profile/AccountInfo.vue").default
+export const ProfileOrderStatus: typeof import("../app/components/profile/OrderStatus.vue").default
 export const ProfileOrders: typeof import("../app/components/profile/Orders.vue").default
 export const ProfilePasswordChange: typeof import("../app/components/profile/PasswordChange.vue").default
 export const ProfileSidebar: typeof import("../app/components/profile/Sidebar.vue").default
@@ -58,6 +61,8 @@ export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components").Html
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components").Body
 export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island").default
+export const LazyAdminHome: LazyComponent<typeof import("../app/components/admin/AdminHome.vue").default>
+export const LazyAdminLogin: LazyComponent<typeof import("../app/components/admin/AdminLogin.vue").default>
 export const LazyAuthForgetPassword: LazyComponent<typeof import("../app/components/auth/ForgetPassword.vue").default>
 export const LazyAuthLogin: LazyComponent<typeof import("../app/components/auth/Login.vue").default>
 export const LazyAuthOtp: LazyComponent<typeof import("../app/components/auth/Otp.vue").default>
@@ -75,6 +80,7 @@ export const LazyLayoutFooter: LazyComponent<typeof import("../app/components/la
 export const LazyLayoutHeaderImg: LazyComponent<typeof import("../app/components/layout/HeaderImg.vue").default>
 export const LazyLayoutNavbar: LazyComponent<typeof import("../app/components/layout/Navbar.vue").default>
 export const LazyProfileAccountInfo: LazyComponent<typeof import("../app/components/profile/AccountInfo.vue").default>
+export const LazyProfileOrderStatus: LazyComponent<typeof import("../app/components/profile/OrderStatus.vue").default>
 export const LazyProfileOrders: LazyComponent<typeof import("../app/components/profile/Orders.vue").default>
 export const LazyProfilePasswordChange: LazyComponent<typeof import("../app/components/profile/PasswordChange.vue").default>
 export const LazyProfileSidebar: LazyComponent<typeof import("../app/components/profile/Sidebar.vue").default>
