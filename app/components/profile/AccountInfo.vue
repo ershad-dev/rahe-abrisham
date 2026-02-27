@@ -29,9 +29,9 @@
           v-else
           @click="showConfirmModal = true"
           :disabled="isSaving || userForm.nationalCode.length < 10"
-          class="bg-[#0b0b54] text-white px-4 md:px-8 py-2 rounded-lg font-bold text-[13px] md:text-[14px] hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 w-fit whitespace-nowrap"
+          class="bg-[#0b0b54] text-white px-4 md:px-8 py-2 rounded-lg font-bold text-[11px] md:text-[14px] hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 w-fit whitespace-nowrap"
         >
-          <span v-if="!isSaving">ذخیره تغییرات</span>
+          <span v-if="!isSaving">ذخیره </span>
           <span v-else class="flex items-center gap-2">
             <div class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             در حال ذخیره...
