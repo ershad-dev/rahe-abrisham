@@ -8,13 +8,21 @@
       <div class="flex items-center gap-3">
         <NuxtLink 
           :to="isLoggedIn ? '/profile' : '/login'" 
-          class="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-lg shadow-sm hover:bg-gray-50 transition text-slate-700 shrink-0"
+          class="relative flex items-center gap-2 bg-white border border-[#ebebeb] px-3 py-1.5 rounded-lg shadow-sm hover:bg-gray-50 transition text-slate-700 shrink-0"
         >
+          <div 
+            v-if="isLoggedIn && !isVerified" 
+            class="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-yellow-400 text-[#0b0b54] shadow-md animate-pulse border-2 border-white"
+            title="نیاز به تکمیل اطلاعات"
+          >
+            <span class="font-black text-[12px] leading-none">!</span>
+          </div>
+
           <span class="text-[13px] font-bold">
             {{ isLoggedIn ? 'پنل کاربری' : 'ورود / ثبت‌نام' }}
           </span>
           
-          <div v-if="isLoggedIn" class="w-7 h-7 bg-[#0b0b54] text-white rounded-md overflow-hidden flex items-center justify-center text-[11px] font-bold font-sans border border-gray-100 shadow-sm">
+          <div v-if="isLoggedIn" class="w-7 h-7 bg-[#0b0b54] text-white rounded-md overflow-hidden flex items-center justify-center text-[11px] font-bold font-sans border border-[#ebebeb] shadow-sm">
             <img v-if="userAvatar" :src="userAvatar" class="w-full h-full object-cover" />
             <span v-else>{{ userInitials }}</span>
           </div>
@@ -37,7 +45,7 @@
 
         <div class="flex items-center mr-2">
           <NuxtLink to="/">
-            <img src="~/assets/images/landing-bg.jpg" alt="Logo" class="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover border border-gray-200">
+            <img src="~/assets/images/landing-bg.jpg" alt="Logo" class="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover border border-[#ebebeb]">
           </NuxtLink>
         </div>
 
@@ -51,15 +59,16 @@
     </div>
 
     <transition name="fade-slide">
-      <div v-if="isOpen" class="lg:hidden fixed inset-x-0 top-[52px] bg-white border-b border-gray-200 shadow-xl z-[100]" dir="rtl">
+      <div v-if="isOpen" class="lg:hidden fixed inset-x-0 top-[52px] bg-white border-b border-[#ebebeb] shadow-xl z-[100]" dir="rtl">
         <ul class="flex flex-col p-4 text-right text-slate-800 font-medium">
           <li><NuxtLink to="/" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">خانه</NuxtLink></li>
           <li><NuxtLink to="/capital" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">تامین سرمایه</NuxtLink></li>
           <li><NuxtLink to="/about" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">درباره ما</NuxtLink></li>
           <li><NuxtLink to="/contact" class="block p-3 hover:bg-gray-50 rounded-lg" @click="isOpen = false">ارتباط با ما</NuxtLink></li>
-          <li class="border-t border-gray-100 mt-2">
+          <li class="border-t border-[#ebebeb] mt-2 relative">
             <NuxtLink :to="isLoggedIn ? '/profile' : '/login'" class="block p-3 text-[#0b0b54] font-bold" @click="isOpen = false">
                {{ isLoggedIn ? 'مشاهده پنل کاربری' : 'ورود / ثبت‌نام' }}
+               <span v-if="isLoggedIn && !isVerified" class="mr-2 inline-flex h-2 w-2 rounded-full bg-yellow-400 animate-ping"></span>
             </NuxtLink>
           </li>
         </ul>
@@ -77,29 +86,34 @@ const isSearchOpen = ref(false)
 const isLoggedIn = ref(false)
 const userName = ref('')
 const userAvatar = ref(null)
+const nationalCode = ref('')
 const route = useRoute()
 
+// تابع بررسی وضعیت نشست و اطلاعات کاربر
 const checkAuth = () => {
   if (process.client) {
-    const authStatus = localStorage.getItem('isLoggedIn')
-    const storedName = localStorage.getItem('display_name')
-    const storedAvatar = localStorage.getItem('user_avatar')
-    
-    isLoggedIn.value = authStatus === 'true'
-    userName.value = storedName || ''
-    userAvatar.value = storedAvatar || null
+    isLoggedIn.value = localStorage.getItem('isLoggedIn') === 'true'
+    userName.value = localStorage.getItem('display_name') || ''
+    userAvatar.value = localStorage.getItem('user_avatar') || null
+    nationalCode.value = localStorage.getItem('user_national_code') || ""
   }
 }
 
+// وضعیت تایید اعتبار سنجی (کد ملی باید ۱۰ رقم باشد)
+const isVerified = computed(() => {
+  return nationalCode.value && nationalCode.value.trim().length === 10;
+})
+
+// استخراج حروف اول نام برای نمایش در صورت نبود تصویر
 const userInitials = computed(() => {
   if (!userName.value) return "?";
   const parts = userName.value.trim().split(' ');
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  }
-  return userName.value.substring(0, 2).toUpperCase();
+  return parts.length >= 2 
+    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() 
+    : userName.value.substring(0, 2).toUpperCase();
 })
 
+// بستن منو و بروزرسانی وضعیت هنگام تغییر صفحه
 watch(() => route.fullPath, () => {
   checkAuth()
   isSearchOpen.value = false
@@ -109,9 +123,13 @@ watch(() => route.fullPath, () => {
 onMounted(() => {
   checkAuth()
   if (process.client) {
+    // گوش دادن به رویداد کاستوم برای آپدیت آنی در تب‌های مختلف
     window.addEventListener('auth-change', checkAuth)
+    
+    // گوش دادن به تغییرات مستقیم LocalStorage
     window.addEventListener('storage', (e) => {
-      if (['isLoggedIn', 'display_name', 'user_avatar'].includes(e.key)) {
+      const keys = ['isLoggedIn', 'display_name', 'user_avatar', 'user_national_code'];
+      if (keys.includes(e.key)) {
         checkAuth()
       }
     })
@@ -121,7 +139,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (process.client) {
     window.removeEventListener('auth-change', checkAuth)
-    window.removeEventListener('storage', checkAuth)
   }
 })
 </script>
@@ -136,5 +153,14 @@ header {
 
 .font-sans {
   font-family: 'Inter', ui-sans-serif, system-ui;
+}
+
+/* انیمیشن تپش ملایم برای جلب توجه کاربر به علامت تعجب */
+@keyframes pulse-custom {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+.animate-pulse {
+  animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>
