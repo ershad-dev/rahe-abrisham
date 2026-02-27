@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#f4f7fa] py-10 px-4 md:px-10" dir="ltr">
+  <div v-if="isAllowed" class="min-h-screen bg-[#f4f7fa] py-10 px-4 md:px-10" dir="ltr">
     <div class="max-w-[1200px] mx-auto ">
       
       <div class="text-center mb-10">
@@ -31,7 +31,7 @@
 
             <ProfileTickets v-else-if="activeTab === 'tickets'" />
 
-            <div v-else class="bg-white p-16 rounded-[20px] shadow-sm border border-gray-50 text-center">
+            <div v-else class="bg-white p-16 rounded-[20px] shadow-sm border border-[#ebebeb] text-center">
               <div class="text-gray-300 mb-4">
                 <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -50,16 +50,37 @@
       </div>
     </div>
   </div>
+
+  <div v-else class="min-h-screen bg-[#f4f7fa] flex flex-col items-center justify-center gap-4">
+    <div class="w-12 h-12 border-4 border-[#0b0b54]/20 border-t-[#0b0b54] rounded-full animate-spin"></div>
+    <span class="text-[#0b0b54] font-bold text-sm">درحال بررسی دسترسی...</span>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-// Import کردن کامپوننت‌های مربوطه (فرض بر این است که ریجیستر شده‌اند یا اتوماتیک لود می‌شوند)
+import { ref, computed, watch, onMounted } from 'vue';
+import { useRouter } from 'nuxt/app';
 
 const activeTab = ref('account');
-const selectedOrderId = ref(null); // ذخیره ID سفارش برای پیگیری
+const selectedOrderId = ref(null);
+const isAllowed = ref(false); // وضعیت اجازه نمایش صفحه
+const router = useRouter();
 
-// وقتی کاربر تب را عوض می‌کند، انتخاب سفارش قبلی را ریست کن
+// منطق محافظت از صفحه (Inline Middleware)
+onMounted(() => {
+  // ۱. چک کردن وضعیت لاگین از حافظه مرورگر
+  const authStatus = localStorage.getItem('isLoggedIn');
+  
+  if (authStatus === 'true') {
+    // اگر لاگین بود، اجازه نمایش صفحه را بده
+    isAllowed.value = true;
+  } else {
+    // اگر لاگین نبود، به صفحه ورود هدایت کن
+    router.push('/login');
+  }
+});
+
+// وقتی کاربر تب را در سایدبار عوض می‌کند، اگر در صفحه پیگیری سفارش بود به لیست برگردد
 watch(activeTab, () => {
   selectedOrderId.value = null;
 });
@@ -70,6 +91,8 @@ const handleTrackOrder = (id) => {
 
 const activeTabName = computed(() => {
   const titles = {
+    'account': 'اطلاعات کاربری',
+    'password': 'تغییر رمز عبور',
     'orders': 'پیگیری سفارش‌ها',
     'tickets': 'تیکت پشتیبانی',
     'auth': 'احراز هویت',
@@ -77,3 +100,25 @@ const activeTabName = computed(() => {
   return titles[activeTab.value] || activeTab.value;
 });
 </script>
+
+<style scoped>
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* انیمیشن چرخش لودینگ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+</style>

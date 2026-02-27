@@ -1,58 +1,39 @@
 <template>
-  <!-- کانتینر اصلی صفحه با بکگراند، وسط‌چین کامل و فونت -->
   <div class="min-h-screen flex items-center justify-center bg-[#f4f7fa] bg-[url('~/assets/images/login-bg.png')] bg-cover bg-center p-4 dir-ltr font-sans">
     
-    <!-- باکس اصلی احراز هویت + افکت لرزش در صورت خطا -->
-    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible ">
+    <div :class="{'shake': isShaking}" class="w-full max-w-[700px] md:h-[380px] rounded-2xl border border-gray-100 shadow-xl flex flex-col md:flex-row animate-[fadeIn_0.6s_ease-out] overflow-visible bg-white">
       
-      <!-- تب موبایل -->
       <div class="flex md:hidden w-full border-b border-gray-100 overflow-hidden rounded-t-2xl bg-gray-50/50">
-        
-        <!-- تب فعال تایید کد -->
-        <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#2b2bb5] text-[#2b2bb5]">
+        <div class="flex-1 py-4 flex flex-col items-center gap-1 bg-white border-b-2 border-[#0b0b54] text-[#0b0b54]">
           <img src="~/assets/images/sign.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">تایید کد</span>
         </div>
-
-        <!-- لینک بازگشت به لاگین -->
-        <NuxtLink to="/auth/login" class="flex-1 py-4 flex flex-col items-center gap-1 text-gray-400 opacity-60">
+        <NuxtLink to="/login" class="flex-1 py-4 flex flex-col items-center gap-1 text-gray-400 opacity-60">
           <img src="~/assets/images/login.png" class="w-5 h-5" />
           <span class="text-[12px] font-bold">برگشت</span>
         </NuxtLink>
       </div>
 
-      <!-- سایدبار دسکتاپ -->
       <div class="relative w-[90px] border-l border-gray-50 hidden md:flex flex-col items-center justify-center gap-8">
-        
-        <!-- نشانگر تب فعال -->
-        <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#2b2bb5] rounded-full transition-all"></div>
-
-        <!-- بخش تایید -->
-        <div class="flex flex-col items-center text-[#0a0a5e] font-bold scale-90">
+        <div class="absolute left-[-2px] top-[115px] w-1 h-14 bg-[#0b0b54] rounded-full transition-all"></div>
+        <div class="flex flex-col items-center text-[#0b0b54] font-bold scale-90">
           <img src="~/assets/images/sign.png" class="w-6 h-6 mb-1" />
           <span class="text-[11px]">تایید</span>
         </div>
-
-        <!-- لینک ورود -->
         <NuxtLink to="/login" class="flex flex-col items-center text-gray-400 opacity-60 scale-90 hover:opacity-100 transition">
           <img src="~/assets/images/login.png" class="w-6 h-6 mb-1 " />
           <span class="text-[11px]">ورود</span>
         </NuxtLink>
       </div>
 
-      <!-- تصویر وسط دسکتاپ -->
       <div class="hidden md:block w-[120px] my-[-15px] mx-3 bg-gradient-to-b from-[#031535] to-[#004282] rounded-[20px] shadow-lg overflow-hidden z-10">
         <img src="~/assets/images/plane.png" class="w-full h-full object-cover" />
       </div>
 
-      <!-- بخش اصلی فرم -->
       <div class="flex-1 flex flex-col justify-center py-6 px-6 md:px-10 md:pr-2 items-center text-center">
-        
-        <!-- عنوان -->
-        <h2 class="text-[#0a0a5e] font-bold text-lg mb-1">تایید هویت</h2>
+        <h2 class="text-[#0b0b54] font-bold text-lg mb-1">تایید هویت</h2>
         <p class="text-gray-400 text-[11px] mb-6">کد ۶ رقمی (123456) را وارد کنید</p>
 
-        <!-- اینپوت‌های OTP -->
         <div class="flex gap-2 mb-2" dir="ltr">
           <input 
             v-for="(_, i) in 6" :key="i"
@@ -61,235 +42,167 @@
             type="text" 
             maxlength="1"
             inputmode="numeric" 
+            :disabled="attempts >= 3"
             @input="handleInput(i, $event)"
             @keydown="handleKeyDown(i, $event)"
-            class="w-10 h-12 md:w-11 md:h-14 text-center text-xl font-bold border-2 border-[#ebebeb] rounded-xl outline-none transition-all bg-[#ebebeb]/30 focus:border-[#0a0a5e] focus:bg-white"
+            class="w-10 h-12 md:w-11 md:h-14 text-center text-xl font-bold border-2 border-[#ebebeb] rounded-xl outline-none transition-all bg-[#ebebeb]/30 focus:border-[#0b0b54] focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
 
-        <!-- نمایش خطا -->
-        <p class="text-red-500 text-[10px] h-4 mb-4 font-bold" :class="{ 'invisible': !errorMsg }">
+        <p class="text-red-500 text-[10px] min-h-[16px] mb-4 font-bold" :class="{ 'invisible': !errorMsg }">
           {{ errorMsg }}
         </p>
 
-        <!-- تایمر و ارسال مجدد -->
         <div class="w-full max-w-[280px] flex justify-between items-center mb-6 text-[11px]">
-          <span :class="timer < 30 ? 'text-red-500' : 'text-[#0a0a5e]'" class="font-bold">
+          <span :class="timer < 30 ? 'text-red-500' : 'text-[#0b0b54]'" class="font-bold">
             {{ formatTime(timer) }}
           </span>
-
-          <button @click="resendCode" :disabled="!showResend" class="transition-colors" :class="showResend ? 'text-[#2b2bb5] font-bold underline' : 'text-gray-300'">
+          <button @click="resendCode" :disabled="!showResend" class="transition-colors" :class="showResend ? 'text-[#0b0b54] font-bold underline' : 'text-gray-300'">
             ارسال مجدد کد
           </button>
         </div>
 
-        <!-- دکمه تایید -->
         <button 
           @click="checkCode" 
-          :disabled="otpValues.some(v => v === '') || isLoading" 
-          class="w-full max-w-[280px] h-12 bg-[#0b0b54] text-white rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:bg-gray-300 flex items-center justify-center"
+          :disabled="otpValues.some(v => v === '') || isLoading || attempts >= 3" 
+          class="w-full max-w-[280px] h-12 bg-[#0b0b54] text-white rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:bg-gray-400 flex items-center justify-center"
         >
-          <span v-if="!isLoading">تایید و ورود به پنل</span>
-
-          <!-- اسپینر هنگام لود -->
+          <span v-if="!isLoading">{{ attempts >= 3 ? 'تعداد تلاش مجاز تمام شد' : 'تایید و ورود به پنل' }}</span>
           <div v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
         </button>
       </div>
     </div>
-    
-    <!-- مودال اطلاع‌رسانی -->
-    <Transition name="fade">
-      <div v-if="modal.show" class="fixed inset-0 bg-black/40 flex items-center justify-center z-[1000] p-4 backdrop-blur-sm">
-        <div class="bg-white p-6 rounded-2xl text-center max-w-[280px] w-full shadow-2xl">
-          <h3 class="text-[#0a0a5e] font-bold text-base mb-2">{{ modal.title }}</h3>
-          <p class="text-gray-500 text-xs mb-6">{{ modal.body }}</p>
-          <button @click="modal.show = false" class="bg-[#0a0a5e] text-white py-2 rounded-lg w-full text-sm font-bold">متوجه شدم</button>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
-/* مقادیر ۶ رقمی کد */
 const otpValues = reactive<string[]>(['', '', '', '', '', ''])
-
-/* رفرنس اینپوت‌ها برای فوکوس خودکار */
 const inputs = ref<HTMLInputElement[]>([]) 
-
-/* تایمر ۲ دقیقه‌ای */
 const timer = ref<number>(120)
-
-/* شمارنده تعداد تلاش‌ها */
 const attempts = ref<number>(0)
-
-/* وضعیت انقضای کد */
-const isExpired = ref<boolean>(false)
-
-/* وضعیت لودینگ */
 const isLoading = ref<boolean>(false)
-
-/* پیام خطا */
 const errorMsg = ref<string>('')
-
-/* نمایش دکمه ارسال مجدد */
 const showResend = ref<boolean>(false)
-
-/* فعال شدن انیمیشن لرزش */
 const isShaking = ref<boolean>(false)
 
-/* مودال عمومی */
-const modal = reactive({ show: false, title: '', body: '' })
-
-/* نگهداری اینتروال تایمر */
 let interval: any
 
-/* شروع تایمر */
 const startTimer = (duration: number) => {
   if (interval) clearInterval(interval)
   timer.value = duration
-  isExpired.value = false
   showResend.value = false
-
   interval = setInterval(() => {
     if (timer.value > 0) {
       timer.value--
       if (timer.value <= 60) showResend.value = true
     } else {
-      isExpired.value = true
       clearInterval(interval)
     }
   }, 1000)
 }
 
-/* تبدیل ثانیه به فرمت دقیقه:ثانیه */
 const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60)
   const secs = seconds % 60
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
-/* مدیریت ورود عدد و فوکوس خودکار */
-const handleInput = async (index: number, e: Event) => {
+const handleInput = (index: number, e: Event) => {
   const target = e.target as HTMLInputElement
-  const val = target.value
+  const val = target.value.replace(/\D/g, '') // فقط عدد
 
-  /* فقط عدد مجاز است */
-  if (!/^\d$/.test(val)) {
+  if (!val) {
     otpValues[index] = ''
     return
   }
 
+  otpValues[index] = val
   errorMsg.value = ''
 
-  /* رفتن به اینپوت بعدی */
-  if (val && index < 5) {
+  if (index < 5) {
     inputs.value[index + 1].focus()
   }
 
-  /* اگر کامل شد اتومات بررسی کن */
   if (otpValues.every(v => v !== '')) {
     checkCode()
   }
 }
 
-/* برگشت به اینپوت قبلی با بک‌اسپیس */
 const handleKeyDown = (index: number, e: KeyboardEvent) => {
   if (e.key === 'Backspace' && !otpValues[index] && index > 0) {
     inputs.value[index - 1].focus()
   }
 }
 
-/* بررسی کد */
 const checkCode = async () => {
-  if (isLoading.value) return
+  if (isLoading.value || attempts.value >= 3) return
   
-  if (otpValues.some(v => v === '')) {
-    errorMsg.value = "لطفاً کد ۶ رقمی را کامل وارد کنید"
-    return
-  }
-
   isLoading.value = true
   const code = otpValues.join('')
 
-  /* شبیه‌سازی درخواست سرور */
-  setTimeout(() => {
+  // شبیه‌سازی درخواست API
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
-    /* اگر کد صحیح باشد */
-    if (code === "123456") {
-
-      const email = localStorage.getItem('pending_user_email') || 'user@test.com'
-      const name = localStorage.getItem('pending_display_name') || 'کاربر عزیز'
-      const phone = localStorage.getItem('pending_user_phone') || ' شماره موبایل'
-
-      /* ثبت اطلاعات نهایی کاربر */
+  if (code === "123456") {
+    if (process.client) {
+      // انتقال دیتای موقت به دیتای اصلی پروفایل
       localStorage.setItem('isLoggedIn', 'true')
-      localStorage.setItem('display_name', name)
-      localStorage.setItem('user_email', email)
-      localStorage.setItem('user_phone', phone)
-
-      /* پاکسازی مقادیر موقت */
-      localStorage.removeItem('pending_user_email')
-      localStorage.removeItem('pending_display_name')
-
-      /* اطلاع به سایر کامپوننت‌ها */
-      if (process.client) {
-        window.dispatchEvent(new Event('auth-change'))
-      }
-
-      /* انتقال به داشبورد */
-      window.location.href = '/dashboard'
+      localStorage.setItem('display_name', localStorage.getItem('pending_display_name') || 'کاربر')
+      localStorage.setItem('user_phone', localStorage.getItem('pending_user_phone') || '')
+      localStorage.setItem('user_email', localStorage.getItem('pending_user_email') || '')
       
-    } else {
-      /* در صورت اشتباه بودن */
-      isLoading.value = false
-      attempts.value++
-      isShaking.value = true
-      errorMsg.value = `کد اشتباه است (تلاش ${attempts.value} از ۳)`
-      otpValues.fill('') 
-      if (inputs.value[0]) inputs.value[0].focus()
-      setTimeout(() => isShaking.value = false, 500)
+      // پاکسازی
+      localStorage.removeItem('pending_display_name')
+      localStorage.removeItem('pending_user_phone')
+      localStorage.removeItem('pending_user_email')
+
+      window.dispatchEvent(new Event('auth-change'))
     }
-  }, 1000)
+    isLoading.value = false
+    await navigateTo('/profile')
+    
+  } else {
+    isLoading.value = false
+    attempts.value++
+    isShaking.value = true
+    
+    if (attempts.value >= 3) {
+      errorMsg.value = "تعداد تلاش‌های مجاز تمام شد. کد جدید دریافت کنید."
+    } else {
+      errorMsg.value = `کد اشتباه است (تلاش ${attempts.value} از ۳)`
+    }
+    
+    otpValues.fill('') 
+    if (attempts.value < 3 && inputs.value[0]) inputs.value[0].focus()
+    setTimeout(() => isShaking.value = false, 500)
+  }
 }
 
-/* ارسال مجدد کد */
 const resendCode = () => {
   attempts.value = 0
+  errorMsg.value = ""
   otpValues.fill('')
   startTimer(120)
   if (inputs.value[0]) inputs.value[0].focus()
 }
 
-/* هنگام لود صفحه */
 onMounted(() => {
-  if (process.client && !localStorage.getItem('pending_display_name')) {
-    window.location.href = '/login'
-  }
   startTimer(120)
+  if (inputs.value[0]) inputs.value[0].focus()
 })
 
-/* پاکسازی اینتروال هنگام خروج */
 onUnmounted(() => clearInterval(interval))
 </script>
 
 <style scoped>
-/* انیمیشن ورود */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* انیمیشن لرزش خطا */
 @keyframes shake {
   10%, 90% { transform: translate3d(-1px, 0, 0); }
   20%, 80% { transform: translate3d(2px, 0, 0); }
   30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
   40%, 60% { transform: translate3d(4px, 0, 0); }
 }
-
 .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-
-/* ترنزیشن مودال */
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>
