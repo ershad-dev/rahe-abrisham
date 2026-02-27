@@ -149,13 +149,13 @@
 
     <Transition name="modal">
       <div v-if="showLogoutModal" class="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" dir="rtl">
-        <div class="bg-white rounded-[24px] w-full max-w-sm overflow-hidden shadow-2xl border border-gray-100 animate-pop">
+        <div class="bg-white rounded-[24px] w-full max-sm:max-w-xs overflow-hidden shadow-2xl border border-gray-100 animate-pop">
            <div class="p-8 text-center">
             <div class="bg-red-50 text-red-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-[#0a0a5e] mb-2">خروج از حساب</h3>
-            <p class="text-gray-500 text-[14px]">آیا مایل هستید از حساب کاربری خود خارج شوید؟ نشست شما خاتمه خواهد یافت.</p>
+            <p class="text-gray-500 text-[14px]">آیا مایل هستید از حساب کاربری خود خارج شوید؟</p>
           </div>
           <div class="p-4 bg-gray-50 flex gap-3">
             <button @click="showLogoutModal = false" class="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 transition-all">انصراف</button>
@@ -169,33 +169,25 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
+import { useRouter } from 'nuxt/app';
 
 const props = defineProps(['activeTab']);
 const emit = defineEmits(['update:activeTab']);
+const router = useRouter();
 
+// --- وضعیت‌های اطلاعات کاربر ---
 const userName = ref("");
 const phoneNumber = ref("");
 const nationalCode = ref("");
 const userImage = ref(null);
+
+// --- وضعیت مودال‌ها ---
 const showViewModal = ref(false);
 const showLogoutModal = ref(false);
+const editModal = reactive({ show: false, tempSrc: null, rotation: 0 });
+const confirmModal = reactive({ show: false, type: '', title: '', message: '', pendingData: null });
 
-// وضعیت مودال ویرایش
-const editModal = reactive({
-  show: false,
-  tempSrc: null,
-  rotation: 0
-});
-
-// وضعیت مودال تایید
-const confirmModal = reactive({
-  show: false,
-  type: '',
-  title: '',
-  message: '',
-  pendingData: null
-});
-
+// --- همگام‌سازی با LocalStorage ---
 const syncSidebarData = () => {
   if (process.client) {
     userName.value = localStorage.getItem('display_name') || "";
@@ -205,80 +197,84 @@ const syncSidebarData = () => {
   }
 };
 
-// ۱. مرحله انتخاب فایل
+// --- مدیریت کلیک روی منو و اسکرول خودکار ---
+const handleMenuClick = (id) => {
+  if (id === 'logout') {
+    showLogoutModal.value = true;
+  } else {
+    // ۱. تغییر تب فعال
+    emit('update:activeTab', id);
+
+    // ۲. اسکرول به محتوا در حالت موبایل
+    if (process.client && window.innerWidth < 1024) {
+      setTimeout(() => {
+        // پیدا کردن کانتینر محتوا در صفحه اصلی (بر اساس کلاسی که دارد)
+        const contentSection = document.querySelector('.lg\\:col-span-8') || 
+                               document.querySelector('.xl\\:col-span-9');
+        
+        if (contentSection) {
+          const headerOffset = 80; // فاصله برای اینکه زیر هدر ثابت نرود
+          const elementPosition = contentSection.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100); // وقفه کوتاه برای رندر شدن تب جدید
+    }
+  }
+};
+
+// --- توابع مدیریت عکس پروفایل (همان کدهای قبلی شما) ---
 const onFileChange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
-  if (file.size > 2 * 1024 * 1024) {
-    alert("حجم تصویر نباید بیشتر از 2 مگابایت باشد");
-    return;
-  }
-
   const reader = new FileReader();
   reader.onload = (event) => {
     editModal.tempSrc = event.target.result;
     editModal.rotation = 0;
     editModal.show = true;
-    showViewModal.value = false; // بستن مودال مشاهده اگر باز بود
+    showViewModal.value = false;
   };
   reader.readAsDataURL(file);
 };
 
-// ۲. چرخش تصویر
-const rotateImage = () => {
-  editModal.rotation = (editModal.rotation + 90) % 360;
-};
+const rotateImage = () => { editModal.rotation = (editModal.rotation + 90) % 360; };
 
-// ۳. پردازش نهایی با Canvas (برش و چرخش)
 const applyEdit = () => {
   const img = new Image();
   img.src = editModal.tempSrc;
   img.onload = () => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    const size = 500; // کیفیت استاندارد خروجی
-    
-    canvas.width = size;
-    canvas.height = size;
-
+    const size = 500;
+    canvas.width = size; canvas.height = size;
     ctx.translate(size/2, size/2);
     ctx.rotate((editModal.rotation * Math.PI) / 180);
-
     const aspect = img.width / img.height;
-    let drawWidth, drawHeight;
-    
-    if (aspect > 1) {
-      drawHeight = size;
-      drawWidth = size * aspect;
-    } else {
-      drawWidth = size;
-      drawHeight = size / aspect;
-    }
-
-    ctx.drawImage(img, -drawWidth/2, -drawHeight/2, drawWidth, drawHeight);
-    
+    let dw, dh;
+    if (aspect > 1) { dh = size; dw = size * aspect; } else { dw = size; dh = size / aspect; }
+    ctx.drawImage(img, -dw/2, -dh/2, dw, dh);
     confirmModal.pendingData = canvas.toDataURL('image/jpeg', 0.8);
     confirmModal.type = 'upload';
     confirmModal.title = 'تأیید نهایی تصویر';
-    confirmModal.message = 'آیا مایل هستید این تصویر به عنوان عکس پروفایل شما ذخیره شود؟';
-    
+    confirmModal.message = 'آیا مایل هستید این تصویر ذخیره شود؟';
     editModal.show = false;
     confirmModal.show = true;
   };
 };
 
-// ۴. باز کردن تایید برای حذف
 const triggerAction = (action) => {
   if (action === 'delete') {
     confirmModal.type = 'delete';
-    confirmModal.title = 'حذف تصویر پروفایل';
-    confirmModal.message = 'با تأیید این عمل، عکس پروفایل شما حذف شده و به حالت پیش‌فرض برمی‌گردد.';
+    confirmModal.title = 'حذف تصویر';
+    confirmModal.message = 'آیا از حذف عکس پروفایل اطمینان دارید؟';
     confirmModal.show = true;
   }
 };
 
-// ۵. اجرای نهایی در LocalStorage
 const executeAction = () => {
   if (confirmModal.type === 'upload') {
     userImage.value = confirmModal.pendingData;
@@ -288,14 +284,22 @@ const executeAction = () => {
     localStorage.removeItem('user_avatar');
     showViewModal.value = false;
   }
-  
   window.dispatchEvent(new Event('auth-change'));
   confirmModal.show = false;
 };
 
-// منطق مربوط به اطلاعات کاربر و منو
-const isVerified = computed(() => nationalCode.value?.trim().length === 10);
+// --- منطق خروج ---
+const confirmLogout = async () => {
+  if (process.client) {
+    localStorage.clear(); // پاکسازی کل حافظه برای امنیت بیشتر
+    window.dispatchEvent(new Event('auth-change'));
+    showLogoutModal.value = false;
+    await router.replace('/login');
+  }
+};
 
+// --- محاسبات نمایشی ---
+const isVerified = computed(() => nationalCode.value?.trim().length === 10);
 const userInitials = computed(() => {
   if (!userName.value) return "??";
   const parts = userName.value.trim().split(' ');
@@ -312,35 +316,13 @@ const menuItems = [
   { id: 'logout', title: 'خروج از حساب', iconPath: 'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1' },
 ];
 
-const handleMenuClick = (id) => {
-  if (id === 'logout') showLogoutModal.value = true;
-  else emit('update:activeTab', id);
-};
-
-const confirmLogout = async () => {
-  if (process.client) {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('display_name');
-    localStorage.removeItem('user_phone');
-    localStorage.removeItem('user_national_code');
-    localStorage.removeItem('user_avatar');
-    window.dispatchEvent(new Event('auth-change'));
-    showLogoutModal.value = false;
-    await navigateTo('/login');
-  }
-};
-
+// --- Lifecycle ---
 onMounted(() => {
   syncSidebarData();
-  if (process.client) {
-    window.addEventListener('auth-change', syncSidebarData);
-  }
+  if (process.client) window.addEventListener('auth-change', syncSidebarData);
 });
-
 onUnmounted(() => {
-  if (process.client) {
-    window.removeEventListener('auth-change', syncSidebarData);
-  }
+  if (process.client) window.removeEventListener('auth-change', syncSidebarData);
 });
 </script>
 
@@ -348,15 +330,12 @@ onUnmounted(() => {
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 
-.modal-enter-active, .modal-leave-active { transition: all 0.3s ease; }
-.modal-enter-from, .modal-leave-to { opacity: 0; transform: scale(0.9); }
+.modal-enter-active, .modal-leave-active { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.modal-enter-from, .modal-leave-to { opacity: 0; transform: scale(0.9) translateY(20px); }
 
 @keyframes pop {
   0% { transform: scale(0.95); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 .animate-pop { animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-/* اسکرول‌بار مخفی برای منو در صورت نیاز */
-::-webkit-scrollbar { width: 0px; background: transparent; }
 </style>

@@ -39,7 +39,7 @@
         </button>
     </div>
 
-    <h2 class="text-[#0a0a5e] font-bold text-xl mb-10 text-right">اطلاعات حساب کاربری</h2>
+    <h2 class="text-[#0a0a5e] font-bold text-l mb-10 text-right">اطلاعات حساب کاربری</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
       <div v-for="field in profileFields" :key="field.key" class="flex flex-col gap-2 text-right">
